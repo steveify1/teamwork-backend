@@ -1,0 +1,22 @@
+{
+    "root": true,
+    "extends": ["airbnb-base", "plugin:node/recommended"],
+    "env": {
+        "node": true,
+        "es6": true,
+        "jasmine": true
+    },
+    "rules": {
+        "spcaed-comments": "off",
+        "no-console": "warn",
+        "consistent-return": "off",
+        "func-names": "off",
+        "object-shorthand": "off",
+        "no-process-exit": "off",
+        "no-param-reassign": "off",
+        "no-return-await": "off",
+        "prefer-destructuring": ["error", { "object": true, "array": false }],
+        "no-unused-vars": ["error", { "argdIgnorePattern": "req|res|next|val" }],
+        "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }]
+    }
+}
