@@ -1,0 +1,30 @@
+{
+  "name": "teamwork",
+  "version": "1.0.0",
+  "description": "An employee interaction web application built with Node JS, Epress and Postgres",
+  "main": "server.js",
+  "scripts": {
+    "test": "jasmine ./src/tests/*.spec.js --stop-on-failure=false",
+    "dev": "nodemon src/server",
+    "start": "node src/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steveify1/teamwork-backend.git"
+  },
+  "author": "Nwakasi Stephen Ifeanyi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/steveify1/teamwork-backend/issues"
+  },
+  "homepage": "https://github.com/steveify1/teamwork-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-node": "^4.0.0",
+    "eslint-plugin-import": "^2.18.2"
+  }
+}
