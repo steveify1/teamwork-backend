@@ -10,6 +10,18 @@ module.exports.validEntries = {
 	"address" : "carlifonia, usa"
 }
 
+module.exports.validEntries2 = {
+    "firstName" : "steve",
+	"lastName" : "love",
+	"email" : "stevesweet@gmail.com",
+	"password" : "mypassword",
+	"confirmPassword": "mypassword",
+	"gender" : "female",
+	"jobRole" : "front end developer",
+	"department" : "marketing",
+	"address" : "carlifonia, usa"
+}
+
 module.exports.invalidFirstName = {
     "firstName": "r",
     "lastName": "nnam",

@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-// Import and set up authorization to generate and validate token
+const { generateToken } = require('../services/authService');
 
 exports.signUp = async (req, res) => {
     const { firstName, lastName, email, password, confirmPassword, gender, jobRole, department, address } = req.body;
@@ -31,11 +31,15 @@ exports.signUp = async (req, res) => {
         User.create(req.body)
             .then(obj => {
                 const { firstname, id, avatar, _timestamp } = obj;
+
+                // gnerate token
+                const token = generateToken({id, _timestamp});
+
                 res.status(201).json({
                     status: 'success',
                     data: {
                         message: 'User account successfully created',
-                        token: 'otY$9+2134j4cvvbSF+7534n10340imvng996m57$',
+                        token,
                         userId: id,
                         firstName: firstname,
                         avatar: avatar,

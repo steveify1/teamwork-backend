@@ -1,5 +1,5 @@
 const globalSpec = require('./index.spec');
-const { validEntries, invalidFirstName, invalidLastName, emailExists, missingRequiredField, passwordMismatch } = require("./mockData/signUpMock");
+const { validEntries, validEntries2, invalidFirstName, invalidLastName, emailExists, missingRequiredField, passwordMismatch } = require("./mockData/signUpMock");
 
 
 globalSpec('POST /auth/signup', (request, baseUrl) => {
@@ -80,5 +80,18 @@ globalSpec('POST /auth/signup', (request, baseUrl) => {
             expect(body.error).toBe('Passwords don\'t match');
             done();
         });
+    });
+
+    it('should return a JWT signed token when the user account is successfully created', done => {
+        request.post({
+            uri: endpoint,
+            json: true,
+            body: validEntries2
+        }, (error, response, body) => {
+            expect(response.statusCode).toEqual(201);
+            expect(body.status).toBe('success');
+            expect(body.data.tokne).not.toBe('undefined');
+        });
+        done();
     });
 });
