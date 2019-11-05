@@ -1,97 +1,70 @@
-module.exports.allFieldsEmpty = {
-    "firstName": "",
-    "lastName": "",
-    "email": "",
-    "password": "",
-    "gender": "",
-    "jobRole": "",
-    "department": "",
-    "address": "",
+module.exports.validEntries = {
+    "firstName" : "rositta",
+	"lastName" : "love",
+	"email" : "rosesweet@gmail.com",
+	"password" : "mypassword",
+	"confirmPassword": "mypassword",
+	"gender" : "female",
+	"jobRole" : "front end developer",
+	"department" : "marketing",
+	"address" : "carlifonia, usa"
 }
 
-module.exports.noFirstName = {
-    "firstName": "steve",
+module.exports.invalidFirstName = {
+    "firstName": "r",
     "lastName": "nnam",
-    "email": "",
-    "password": "1234",
+    "email": "invalidfirstname@gmail.com",
+	"password" : "mypassword",
+	"confirmPassword": "mypassword",
     "gender": "male",
     "jobRole": "graphics",
     "department": "marketing",
     "address": "3, sinclair close, okokomaiko",
 }
-module.exports.noLastName = {
+module.exports.invalidLastName = {
     "firstName": "steve",
-    "lastName": "",
-    "email": "teamworkmail@gmail.com",
-    "password": "1234",
-    "gender": "male",
-    "jobRole": "graphics",
-    "department": "marketing",
-    "address": "3, sinclair close, okokomaiko",
-}
-
-module.exports.noEmail = {
-    "firstName": "steve",
-    "lastName": "nnam",
-    "email": "",
-    "password": "1234",
+    "lastName": "n",
+    "email": "invalidlastname@gmail.com",
+	"password" : "mypassword",
+	"confirmPassword": "mypassword",
     "gender": "male",
     "jobRole": "graphics",
     "department": "marketing",
     "address": "3, sinclair close, okokomaiko",
 }
 
-module.exports.noPassword = {
-    "firstName": "steve",
-    "lastName": "nnam",
-    "email": "teamworkmail@gmail.com",
-    "password": "",
-    "gender": "male",
-    "jobRole": "graphics",
-    "department": "marketing",
-    "address": "3, sinclair close, okokomaiko",
+module.exports.emailExists = {
+    "firstName" : "rositta",
+	"lastName" : "love",
+	"email" : "rosesweet@gmail.com",
+	"password" : "mypassword",
+	"confirmPassword": "mypassword",
+	"gender" : "female",
+	"jobRole" : "front end developer",
+	"department" : "marketing",
+	"address" : "carlifonia, usa"
 }
 
-module.exports.noGender = {
+module.exports.missingRequiredField = {
     "firstName": "steve",
     "lastName": "nnam",
     "email": "teamworkmail@gmail.com",
-    "password": "1234",
-    "gender": "",
-    "jobRole": "graphics",
-    "department": "marketing",
-    "address": "3, sinclair close, okokomaiko",
-}
-
-module.exports.noJobRole = {
-    "firstName": "steve",
-    "lastName": "nnam",
-    "email": "teamworkmail@gmail.com",
-    "password": "1234",
+	"password" : "mypassword",
+	"confirmPassword": "mypassword",
     "gender": "male",
     "jobRole": "",
     "department": "marketing",
     "address": "3, sinclair close, okokomaiko",
 }
 
-module.exports.noDepartment = {
+module.exports.passwordMismatch = {
     "firstName": "steve",
     "lastName": "nnam",
     "email": "teamworkmail@gmail.com",
-    "password": "1234",
+	"password" : "mypassword",
+	"confirmPassword": "mypassword1",
     "gender": "male",
-    "jobRole": "graphics",
-    "department": "",
-    "address": "3, sinclair close, okokomaiko",
-}
-
-module.exports.noAddress = {
-    "firstName": "steve",
-    "lastName": "nnam",
-    "email": "teamworkmail@gmail.com",
-    "password": "1234",
-    "gender": "male",
-    "jobRole": "graphics",
+    "jobRole": "front end developer",
     "department": "marketing",
-    "address": "",
+    "address": "3, sinclair close, okokomaiko",
 }
