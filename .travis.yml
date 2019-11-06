@@ -14,7 +14,7 @@ branches:
     - develop
 before_script:
   - psql -c 'drop database if exists teamwork;' -U postgres
-  - psql -c 'create database if not exists teamwork;' -U postgres
+  - psql -c 'create database teamwork;' -U postgres
 install:
   - npm install
 cache:
