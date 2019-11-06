@@ -1,29 +1,17 @@
-const pgClient = require("../config/db");
+const pgClient = require("../../config/db");
 const bcrypt = require('bcryptjs');
 
 class User {
     constructor() {
         this.relation = 'users';
         this.defaultAvatar = {
-            male:'https://huntpng.com/images250/png-avatar-4.png',
+            male: 'https://huntpng.com/images250/png-avatar-4.png',
             female: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSrZZcWGdWlk-DnfheLjRO1dM8s7q5GrMf4KMMrdi7os8K6oGeg'
         };
+    }
 
-        pgClient.query(`
-        CREATE TABLE IF NOT EXISTS 
-        ${this.relation} (
-            id SERIAL PRIMARY KEY,
-            firstname VARCHAR(25) NOT NULL,
-            lastname VARCHAR(25) NOT NULL,
-            email VARCHAR(50) UNIQUE NOT NULL,
-            password VARCHAR NOT NULL,
-            gender VARCHAR(6),
-            job_role VARCHAR(20),
-            department VARCHAR(20) NOT NULL,
-            address VARCHAR NOT NULL,
-            avatar VARCHAR NOT NULL,
-            _timestamp VARCHAR NOT NULL);`)
-            .catch(e => console.log(`failed to create table: '${this.relation}': ${e}`));
+    static async schema() {
+
     }
 
     async create(data) {

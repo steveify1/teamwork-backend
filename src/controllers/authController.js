@@ -1,4 +1,4 @@
-const User = require("../models/userModel");
+const User = require("../database/models/userModel");
 const { generateToken } = require('../services/authService');
 
 exports.signUp = async (req, res) => {
