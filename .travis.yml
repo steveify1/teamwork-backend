@@ -1,10 +1,5 @@
 services:
   - postgresql
-addons:
-  postgresql: '12'
-before_script:
-  - psql -c 'drop database if exists teamwork;' -U postgres
-  - psql -c 'create database if not exists teamwork;' -U postgres
 env:
   global:
     - PG_DB=teamwork
@@ -17,6 +12,9 @@ node_js:
 branches:
   only:
     - develop
+before_script:
+  - psql -c 'drop database if exists teamwork;' -U postgres
+  - psql -c 'create database if not exists teamwork;' -U postgres
 install:
   - npm install
 cache:
