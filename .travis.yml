@@ -1,9 +1,20 @@
+services:
+  - postgresql
+env:
+  global:
+    - PG_DB=teamwork
+    - PG_HOST=localhost
+    - PG_USER=postgres
+    - PG_PORT=5432
 language: node_js
 node_js:
   - 10.14.1
 branches:
   only:
     - develop
+before_script:
+  - psql -c 'drop database if exists teamwork;' -U postgres
+  - psql -c 'create database teamwork;' -U postgres
 install:
   - npm install
 cache:
