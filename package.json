@@ -1,7 +1,7 @@
 {
   "name": "teamwork",
   "version": "1.0.0",
-  "description": "An employee interaction web application built with Node JS, Epress and Postgres",
+  "description": "An employee interaction web application built with Node JS, Express and Postgres",
   "main": "server.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text jasmine src/tests/*.spec.js",
