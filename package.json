@@ -4,6 +4,7 @@
   "description": "An employee interaction web application built with Node JS, Epress and Postgres",
   "main": "server.js",
   "scripts": {
+    "lint": "eslint src/**/*.js",
     "test": "jasmine src/tests/*.spec.js",
     "dev": "nodemon src/server",
     "start": "node src/server"
@@ -33,6 +34,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-node": "^4.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
     "jasmine": "^3.5.0",
     "request": "^2.88.0"
   }
