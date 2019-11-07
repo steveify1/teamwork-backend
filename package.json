@@ -19,7 +19,14 @@
   },
   "homepage": "https://github.com/steveify1/teamwork-backend#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "encodeurl": "^1.0.2",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "pg": "^7.12.1"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

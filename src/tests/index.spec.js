@@ -1,6 +1,12 @@
 // This is the global test config file
 // It should be imported and reused in every other test file
-const request = require("request");;
+
+const dotenv = require('dotenv').config();
+const request = require("request");
+const runMigrations = require('../database/migrations');
+const pgClient = require('../config/db');
+
+
 
 /**
  * This holds all the global configurations that may apply to all the tests
@@ -13,20 +19,25 @@ const request = require("request");;
  * @baseUrl the base url(protocol + hostname + port) of the target server to send the http request
  *      
  */
-module.exports = (testName, testSuite) => {
+module.exports = async (testName, testSuite) => {
     describe(("Server"), () => {
         let server;
         const baseUrl = "http://127.0.0.1:3000";
-    
-        beforeAll(() => {
-            server = require("../server").server;
+
+        beforeAll(done => {
+            server = require("../app").listen(3000, async () => {
+                await runMigrations(); // Creates all the database tables based on the schemas
+                await pgClient.query('TRUNCATE users');
+                done();
+            });
         });
-    
-        afterAll(() => {
+
+        afterAll(done => {
             server.close();
+            done();
         });
-    
-        // Your test code goes here
+
+        // Your test suite runs inside this describe block
         describe(testName, () => testSuite(request, baseUrl));
     });
 };
