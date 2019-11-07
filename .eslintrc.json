@@ -1,6 +1,6 @@
 {
     "root": true,
-    "extends": ["airbnb-base", "plugin:node/recommended"],
+    "extends": ["airbnb-base"],
     "env": {
         "node": true,
         "es6": true,
