@@ -14,6 +14,6 @@ const router = new Router();
  * Routing based on the API version used by the client.
  * So far, there is only one API version - the LEGACY version.
  */
-router.use('v1', apiV1);
+router.use('/v1', apiV1);
 
 module.exports = router;
