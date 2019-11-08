@@ -7,7 +7,8 @@
     "test": "nyc --reporter=html --reporter=text jasmine src/tests/*.spec.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "dev": "nodemon src/server",
-    "start": "node src/server"
+    "start": "node src/server",
+    "lint": "eslint ./src/**/*.js"
   },
   "repository": {
     "type": "git",
