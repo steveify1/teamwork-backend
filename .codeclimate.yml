@@ -1,3 +1,6 @@
+checks:
+  - method-complexity:
+    - enabled: false
 exclude_patterns:
   - "node_modules"
   - "src/tests"
