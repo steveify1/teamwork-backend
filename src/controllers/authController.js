@@ -52,35 +52,39 @@ exports.signUp = async (req, res) => {
 exports.login = async (req, res) => {
   const clientData = req.body;
 
-  // check if email field is supplied
-  if (!clientData.email) { return sendResponse(res, 400, 'error', 'Missing email field'); }
+  try {
+    // check if email field is supplied
+    if (!clientData.email) { return sendResponse(res, 400, 'error', 'Missing email field'); }
 
-  // check if passowrd field is supplied
-  if (!clientData.password) { return sendResponse(res, 400, 'error', 'Missing password field'); }
+    // check if passowrd field is supplied
+    if (!clientData.password) { return sendResponse(res, 400, 'error', 'Missing password field'); }
 
-  // check if email exists an return associated row from the database if email exists
-  const { rowCount, rows } = await User.emailExists(clientData.email);
-  if (!rowCount) { return sendResponse(res, 401, 'error', 'Email and password don\'t match'); }
+    // check if email exists an return associated row from the database if email exists
+    const { rowCount, rows } = await User.emailExists(clientData.email);
+    if (!rowCount) { return sendResponse(res, 401, 'error', 'Email and password don\'t match'); }
 
-  // extract necessary user information from returned table row
-  const {
-    id,
-    firstname,
-    _timestamp,
-    password,
-  } = rows[0];
+    // extract necessary user information from returned table row
+    const {
+      id,
+      firstname,
+      _timestamp,
+      password,
+    } = rows[0];
 
-  // check if client password matches password from the database
-  const passwordConfirmed = await bcrypt.compare(clientData.password, password);
-  if (!passwordConfirmed) { return sendResponse(res, 401, 'error', 'Email and password don\'t match'); }
+    // check if client password matches password from the database
+    const passwordConfirmed = await bcrypt.compare(clientData.password, password);
+    if (!passwordConfirmed) { return sendResponse(res, 401, 'error', 'Email and password don\'t match'); }
 
-  // generate user token
-  const token = generateToken({ id, _timestamp });
+    // generate user token
+    const token = generateToken({ id, _timestamp });
 
-  // send token and success status to log the user into app
-  return sendResponse(res, 202, 'success', {
-    token: token,
-    userId: id,
-    firstName: firstname,
-  });
+    // send token and success status to log the user into app
+    sendResponse(res, 202, 'success', {
+      token: token,
+      userId: id,
+      firstName: firstname,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
