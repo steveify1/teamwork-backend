@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
-const pgClient = require('../../config/db');
+const Model = require('./model');
 
-class User {
+class User extends Model {
   constructor() {
-    this.relation = 'users';
+    super('users');
     this.defaultAvatar = {
       male: 'https://huntpng.com/images250/png-avatar-4.png',
       female: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSrZZcWGdWlk-DnfheLjRO1dM8s7q5GrMf4KMMrdi7os8K6oGeg',
@@ -20,7 +20,7 @@ class User {
     try {
       data.password = await bcrypt.hash(data.password, 10);
 
-      const { rows } = await pgClient.query(query,
+      const { rows } = await this.query.query(query,
         [
           data.firstName.toLowerCase(),
           data.lastName.toLowerCase(),
@@ -42,13 +42,14 @@ class User {
 
   // Checks to confirm that if the user's email exists
   async emailExists(email) {
-    const query = `SELECT email, password FROM ${this.relation} WHERE email=$1`;
     try {
-      return await pgClient.query(query, [email]);
+      return await this.findByProps({ email: email });
     } catch (error) {
       console.log(`Unable to fetch object: ${error}`);
     }
   }
 }
+
+console.log(User);
 
 module.exports = new User();

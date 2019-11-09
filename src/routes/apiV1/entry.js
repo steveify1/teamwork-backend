@@ -2,12 +2,15 @@ const { Router } = require('express');
 
 // Importing endpoints to application resources
 const authRoute = require('./authRoute');
+const articleRoute = require('./articleRoute');
 
-const router = new Router();
+const router = Router();
 
 // Login/Register Router
 router.use('/auth', authRoute);
 
+// Article Route
+router.use('/articles', articleRoute);
 
 // Exposing API version
 module.exports = router;
