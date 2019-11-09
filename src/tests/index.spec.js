@@ -2,7 +2,6 @@
 // It should be imported and reused in every other test file
 
 require('dotenv').config();
-const request = require('request');
 const runMigrations = require('../database/migrations');
 const pgClient = require('../config/db');
 
@@ -17,14 +16,15 @@ const pgClient = require('../config/db');
  * @request used for sending http requests
  * @baseUrl the base url(protocol + hostname + port) of the target server to send the http request
  */
-module.exports = async (testName, testSuite) => {
+
+module.exports = (testName, testSuite) => {
   describe(('Server'), () => {
     let server;
-    const baseUrl = 'http://127.0.0.1:3000';
 
     beforeAll((done) => {
       // eslint-disable-next-line global-require
-      server = require('../app').listen(3000, async () => {
+      server = require('../server');
+      server.listen('3000', async () => {
         await runMigrations(); // Creates all the database tables based on the schemas
         await pgClient.query('TRUNCATE users');
         done();
@@ -37,6 +37,6 @@ module.exports = async (testName, testSuite) => {
     });
 
     // Your test suite runs inside this describe block
-    describe(testName, () => testSuite(request, baseUrl));
+    describe(testName, () => testSuite());
   });
 };

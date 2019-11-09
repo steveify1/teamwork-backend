@@ -8,9 +8,7 @@ const routes = require('./routes/routes');
 const app = express();
 
 // Debugging with morgan
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan());
-}
+if (process.env.NODE_ENV === 'development') { app.use(morgan()); }
 
 // Parsing JSON and adding a "body" property to the "Request" object
 app.use(bodyParser.json());

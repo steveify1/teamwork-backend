@@ -42,10 +42,9 @@ class User {
 
   // Checks to confirm that if the user's email exists
   async emailExists(email) {
-    const query = `SELECT email FROM ${this.relation} WHERE email=$1`;
+    const query = `SELECT email, password FROM ${this.relation} WHERE email=$1`;
     try {
-      const { rowCount } = await pgClient.query(query, [email]);
-      return rowCount;
+      return await pgClient.query(query, [email]);
     } catch (error) {
       console.log(`Unable to fetch object: ${error}`);
     }
