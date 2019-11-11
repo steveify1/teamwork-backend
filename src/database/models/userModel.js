@@ -50,6 +50,4 @@ class User extends Model {
   }
 }
 
-console.log(User);
-
 module.exports = new User();

@@ -7,10 +7,9 @@ const request = require('request');
  * @param { Object } headers - request headers
  * @param { Object } body - the data in json format
  * @param { Function } callback - a callback function called when
- * @param { Object } auth - an object containing the bearer token. ('bearer': 'client token')
  * a response is returned
  */
-module.exports = (method, uri, headers, body, callback, auth) => {
+module.exports = (method, uri, headers, body, callback) => {
   const localBaseUri = 'http://127.0.0.1:3000';
   const localFullUri = `${localBaseUri}${uri}`;
 
@@ -30,9 +29,6 @@ module.exports = (method, uri, headers, body, callback, auth) => {
   }
 
   // add authentication to the options if the 'auth' argument is defined
-  if (auth) {
-    options.auth = auth;
-  }
 
   // put the HTTP method in lowercase
   method = method.toLowerCase();

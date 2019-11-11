@@ -9,37 +9,49 @@ class Model {
 
   async findById(id, projection) {
     try {
+      if (!id) { throw new Error('id must be given'); }
       return await this.findByProps(id, projection);
-    } catch (error) {
-      console.log(`Unable to fetch object: ${error}`);
+    } catch ({ message }) {
+      return `Unable to fetch object: ${message}`;
     }
   }
 
   async findByProps(props, projection) {
-    const { restrictionString, values } = this.getRestriction(props);
-    projection = this.getProjection(projection);
-
-    // generate the query string
-    const query = `SELECT ${projection} FROM ${this.relation} WHERE ${restrictionString};`;
-
-    // execute the actual query
     try {
+      if (!props || typeof props !== 'object') { throw new Error('no attribute provided'); }
+
+      if (!Object.keys(props).length) { throw new Error('no attribute provided'); }
+
+      const { restrictionString, values } = this.getRestriction(props);
+      projection = this.getProjection(projection);
+
+      // generate the query string
+      const query = `SELECT ${projection} FROM ${this.relation} WHERE ${restrictionString};`;
+
+      // execute the actual query
       return await this.DB.query(query, values);
-    } catch (error) {
-      console.log(`Unable to fetch object: ${error}`);
+    } catch ({ message }) {
+      return `Unable to fetch object: ${message}`;
     }
   }
 
   // update a row in a relation
   async updateById(id, props) {
-    const { restrictionString, values } = this.getRestriction(props);
-    // generate query string
-    const query = `UPDATE ${this.relation} SET ${restrictionString} WHERE id=${values.length + 1}`;
-
     try {
-      return await this.BD.query(query, [...values, id]);
-    } catch (error) {
-      console.log(`Unable to fetch object: ${error}`);
+      if (!id) { throw new Error('id must be given'); }
+
+      if (!props || typeof props !== 'object') { throw new Error('no attribute provided'); }
+
+      if (!Object.keys(props).length) { throw new Error('no attribute provided'); }
+
+      const { restrictionString, values } = this.getRestriction(props);
+      // generate query string
+      const query = `UPDATE ${this.relation} SET ${restrictionString} WHERE id=${values.length + 1}`;
+
+
+      return await this.DB.query(query, [...values, id]);
+    } catch ({ message }) {
+      return `Unable to fetch object: ${message}`;
     }
   }
 

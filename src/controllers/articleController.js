@@ -4,21 +4,22 @@ const sendResponse = require('../utils/sendResponse');
 
 exports.createArticle = async (req, res) => {
   const clientData = req.body;
-  // check that the article title is not empty
-  if (!clientData.title) { return sendResponse(res, 400, 'error', 'Missing article title'); }
 
-  // check that the artcile body is not empty
-  if (!clientData.article) { return sendResponse(res, 400, 'error', 'Missing article body'); }
-
-  // check that the article body contains more that 30 characters
-  if (clientData.article.length < 20) {
-    return sendResponse(res, 400, 'error', 'Article body must be greater than 20 characters');
-  }
-
-  // check if the article title already exists in the articles table
   try {
+    // check that the article title is not empty
+    if (!clientData.title) { throw new Error('Missing article title'); }
+
+    // check that the artcile body is not empty
+    if (!clientData.article) { throw new Error('Missing article body'); }
+
+    // check that the article body contains more that 30 characters
+    if (clientData.article.length < 20) {
+      throw new Error('Article body must be greater than 20 characters');
+    }
+
+    // check if the article title already exists in the articles table
     const { rowCount } = await Article.findByProps({ title: clientData.title });
-    if (rowCount) { return sendResponse(res, 400, 'error', 'Article title must be unique'); }
+    if (rowCount) { throw new Error('Article title must be unique'); }
 
     // if everything else is good, post data to db
     const {
@@ -42,7 +43,7 @@ exports.createArticle = async (req, res) => {
       authorId: author_id,
       createdOn: _timestamp,
     });
-  } catch (error) {
-    console.log(`An error occured::: ${error}`);
+  } catch ({ message }) {
+    sendResponse(res, 400, 'error', message);
   }
 };
