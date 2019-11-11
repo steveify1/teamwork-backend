@@ -27,7 +27,7 @@ globalSpec('POST /auth/signup', () => {
   });
 
   afterAll(async (done) => {
-    await pgClient.query('TRUNCATE users;');
+    await pgClient.query('TRUNCATE users CASCADE;');
     done();
   });
 

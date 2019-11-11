@@ -15,7 +15,7 @@ exports.createArticle = async (req, res) => {
     return sendResponse(res, 400, 'error', 'Article body must be greater than 20 characters');
   }
 
-  // check if the article title exists
+  // check if the article title already exists in the articles table
   try {
     const { rowCount } = await Article.findByProps({ title: clientData.title });
     if (rowCount) { return sendResponse(res, 400, 'error', 'Article title must be unique'); }

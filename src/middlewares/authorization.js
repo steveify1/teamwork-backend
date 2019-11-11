@@ -5,8 +5,6 @@ module.exports = async (req, res, next) => {
   const notLoggedInMessage = 'Please, sign up or log in to your account.';
   let token = '';
 
-  console.log(req.headers);
-
   // verify that the authorization header is defined
   if (!req.headers.authorization) {
     return sendResponse(res, 401, 'error', notLoggedInMessage);

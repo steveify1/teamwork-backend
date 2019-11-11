@@ -8,6 +8,6 @@ module.exports = Schema('articles', () => `
     article TEXT NOT NULL,
     slug VARCHAR UNIQUE NOT NULL,
     tags JSON,
-    author_id INTEGER,
+    author_id INTEGER REFERENCES users(id),
     _timestamp VARCHAR NOT NULL);
 `);
