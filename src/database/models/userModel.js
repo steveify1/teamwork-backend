@@ -12,15 +12,15 @@ class User extends Model {
 
   async create(data) {
     const query = `
-        INSERT INTO ${this.relation} 
-        (firstname, lastname, email, password, gender, job_role, department, address, avatar, _timestamp) 
-        values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id, firstname, avatar, _timestamp;
-        `;
+      INSERT INTO ${this.relation} 
+      (firstname, lastname, email, password, gender, job_role, department, address, avatar, _timestamp) 
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id, firstname, avatar, _timestamp;
+      `;
 
     try {
       data.password = await bcrypt.hash(data.password, 10);
 
-      const { rows } = await this.query.query(query,
+      const { rows } = await this.DB.query(query,
         [
           data.firstName.toLowerCase(),
           data.lastName.toLowerCase(),

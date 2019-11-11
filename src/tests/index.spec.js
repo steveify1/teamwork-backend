@@ -3,7 +3,6 @@
 
 require('dotenv').config();
 const runMigrations = require('../database/migrations');
-const pgClient = require('../config/db');
 
 /**
  * This holds all the global configurations that may apply to all the tests
@@ -26,7 +25,6 @@ module.exports = (testName, testSuite) => {
       server = require('../server');
       server.listen('3000', async () => {
         await runMigrations(); // Creates all the database tables based on the schemas
-        await pgClient.query('TRUNCATE users');
         done();
       });
     });

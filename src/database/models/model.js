@@ -4,7 +4,7 @@ const pgClient = require('../../config/db');
 class Model {
   constructor(relation) {
     this.relation = relation;
-    this.query = pgClient;
+    this.DB = pgClient;
   }
 
   async findById(id, projection) {
@@ -24,7 +24,7 @@ class Model {
 
     // execute the actual query
     try {
-      return await this.query.query(query, values);
+      return await this.DB.query(query, values);
     } catch (error) {
       console.log(`Unable to fetch object: ${error}`);
     }
@@ -37,7 +37,7 @@ class Model {
     const query = `UPDATE ${this.relation} SET ${restrictionString} WHERE id=${values.length + 1}`;
 
     try {
-      return await this.query.query(query, [...values, id]);
+      return await this.BD.query(query, [...values, id]);
     } catch (error) {
       console.log(`Unable to fetch object: ${error}`);
     }
