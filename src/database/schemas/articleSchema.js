@@ -4,14 +4,10 @@ module.exports = Schema('articles', () => `
     CREATE TABLE IF NOT EXISTS 
     articles (
     id SERIAL PRIMARY KEY,
-    firstname VARCHAR(25) NOT NULL,
-    lastname VARCHAR(25) NOT NULL,
-    email VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR NOT NULL,
-    gender VARCHAR(6),
-    job_role VARCHAR(20),
-    department VARCHAR(20) NOT NULL,
-    address VARCHAR NOT NULL,
-    avatar VARCHAR NOT NULL,
+    title VARCHAR UNIQUE NOT NULL,
+    article TEXT NOT NULL,
+    slug VARCHAR UNIQUE NOT NULL,
+    tags JSON,
+    author_id INTEGER REFERENCES users(id),
     _timestamp VARCHAR NOT NULL);
 `);

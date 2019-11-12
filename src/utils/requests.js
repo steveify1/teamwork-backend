@@ -4,19 +4,37 @@ const request = require('request');
  * An extension of the popular request module
  * @param { String } method - the http method. defaults to GET
  * @param { String } uri - the uri or endpoint
+ * @param { Object } headers - request headers
  * @param { Object } body - the data in json format
  * @param { Function } callback - a callback function called when
  * a response is returned
  */
-module.exports = (method, uri, body, callback) => {
+module.exports = (method, uri, headers, body, callback) => {
   const localBaseUri = 'http://127.0.0.1:3000';
   const localFullUri = `${localBaseUri}${uri}`;
-  method = method.toLowerCase();
-  const isRemoteUri = uri.startsWith('http') || uri.startsWith('https');
+
+  // test if the uri is a remote one or not
+  const isRemoteUri = uri.startsWith(localBaseUri);
   uri = isRemoteUri ? uri : localFullUri;
-  request[method]({
+
+  const options = {
     uri: uri,
     body: body,
     json: true,
-  }, callback);
+  };
+
+  // add headers to the options if the 'headers' argument is defined
+  if (headers) {
+    options.headers = Object.keys(headers).length ? headers : {};
+  }
+
+  // add authentication to the options if the 'auth' argument is defined
+
+  // put the HTTP method in lowercase
+  method = method.toLowerCase();
+  try {
+    request[method](options, callback);
+  } catch (e) {
+    console.log(e);
+  }
 };

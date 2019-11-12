@@ -43,8 +43,8 @@ exports.signUp = async (req, res) => {
           avatar,
         });
       });
-  } catch (error) {
-    console.log(error);
+  } catch ({ message }) {
+    console.log(message);
   }
 };
 
