@@ -69,3 +69,15 @@ exports.duplicateArticleTitle = {
 		]
 	}
 };
+
+// Update article
+exports.completeUpdateData = {
+	"title": "Love You, JavaScript",
+	"article": "Did you know that JavaScript is the only language you can use to write almost any kind of application",
+	"tags": {
+		"values": [
+			"javascript",
+			"web3"
+		]
+	}
+};

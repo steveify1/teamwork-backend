@@ -1,10 +1,15 @@
 const { Router } = require('express');
-const authorization = require('../../middlewares/authorization');
-const { createArticle } = require('../../controllers/articleController');
+const {
+  createArticle,
+  updateArticle,
+} = require('../../controllers/articleController');
 
 const router = Router();
 
 router.route('/')
-  .post(authorization, createArticle);
+  .post(createArticle);
+
+router.route('/:id')
+  .patch(updateArticle);
 
 module.exports = router;
