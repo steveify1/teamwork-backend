@@ -10,7 +10,7 @@ class Model {
   async findById(id, projection) {
     try {
       if (!id) { throw new Error('id must be given'); }
-      return await this.findByProps(id, projection);
+      return await this.findByProps({ id }, projection);
     } catch ({ message }) {
       return `Unable to fetch object: ${message}`;
     }
@@ -27,6 +27,7 @@ class Model {
 
       // generate the query string
       const query = `SELECT ${projection} FROM ${this.relation} WHERE ${restrictionString};`;
+      console.log(query, values);
 
       // execute the actual query
       return await this.DB.query(query, values);
@@ -44,13 +45,14 @@ class Model {
 
       if (!Object.keys(props).length) { throw new Error('no attribute provided'); }
 
-      const { restrictionString, values } = this.getRestriction(props);
+      const { restrictionString, values } = this.getUpdateRestriction(props);
+
       // generate query string
-      const query = `UPDATE ${this.relation} SET ${restrictionString} WHERE id=${values.length + 1}`;
+      const query = `UPDATE ${this.relation} SET ${restrictionString} WHERE id=$${values.length + 1} RETURNING *;`;
 
-
+      // execute the query and return data
       return await this.DB.query(query, [...values, id]);
-    } catch ({ message }) {
+    } catch ({ stack, message }) {
       return `Unable to fetch object: ${message}`;
     }
   }
@@ -70,6 +72,24 @@ class Model {
     keys.forEach((key, i) => {
       i += 1;
       if (i > 1) { restrictionString += ' AND '; }
+      restrictionString += `${key}=$${i}`;
+      values.push(props[key]);
+    });
+
+    return {
+      restrictionString,
+      values,
+    };
+  }
+
+  getUpdateRestriction(props) {
+    const values = [];
+    const keys = Object.keys(props);
+    let restrictionString = '';
+
+    keys.forEach((key, i) => {
+      i += 1;
+      if (i > 1) { restrictionString += ', '; }
       restrictionString += `${key}=$${i}`;
       values.push(props[key]);
     });

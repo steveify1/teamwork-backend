@@ -21,6 +21,17 @@ exports.completeArticleData = {
 	}
 };
 
+exports.completeArticleData2 = {
+	"title": "title 2",
+	"article": "hello folks. my name is steve and I am a web developer in need of Christ.r",
+	"tags": {
+		"values": [
+			"javascript",
+			"web3"
+		]
+	}
+};
+
 exports.noArticleTitle = {
 	"title": "",
 	"article": "hello folks. my name is steve and I am a web developer in need of Christ.",
@@ -71,7 +82,7 @@ exports.duplicateArticleTitle = {
 };
 
 // Update article
-exports.completeUpdateData = {
+exports.completeArticleUpdate = {
 	"title": "Love You, JavaScript",
 	"article": "Did you know that JavaScript is the only language you can use to write almost any kind of application",
 	"tags": {
