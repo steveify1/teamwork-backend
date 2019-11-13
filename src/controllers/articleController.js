@@ -2,6 +2,7 @@
 const Article = require('../database/models/articleModel');
 const ResponseError = require('../utils/responseError');
 const sendResponse = require('../utils/sendResponse');
+const consoleLogger = require('../utils/consoleLogger');
 
 exports.createArticle = async (req, res) => {
   const clientData = req.body;
@@ -44,8 +45,9 @@ exports.createArticle = async (req, res) => {
       authorId: author_id,
       createdOn: timestamp,
     });
-  } catch ({ statusCode, message }) {
-    sendResponse(res, statusCode, 'error', message);
+  } catch (error) {
+    consoleLogger.log(error);
+    sendResponse(res, error.statusCode, 'error', error.message);
   }
 };
 
@@ -92,7 +94,8 @@ exports.updateArticle = async (req, res) => {
       authorId: result.author_id,
       createdOn: result.timestamp,
     });
-  } catch ({ statusCode, message }) {
-    sendResponse(res, statusCode, 'error', message);
+  } catch (error) {
+    console.log(error.stack);
+    sendResponse(res, error.statusCode, 'error', error.message);
   }
 };
