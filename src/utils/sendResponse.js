@@ -4,7 +4,6 @@
  */
 module.exports = (res, statusCode, status, data) => {
   // if the error was raised my an unhandled part our application, set statusCode to 500
-  console.log(statusCode);
   if (!statusCode) {
     statusCode = 500;
   }

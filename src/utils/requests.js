@@ -13,8 +13,6 @@ module.exports = (method, uri, headers, body, callback) => {
   const localBaseUri = 'http://127.0.0.1:3000';
   const localFullUri = `${localBaseUri}${uri}`;
 
-  console.log('uri::: ' + uri);
-
   // test if the uri is a remote one or not
   const isRemoteUri = uri.startsWith(localBaseUri);
   uri = isRemoteUri ? uri : localFullUri;
