@@ -58,33 +58,36 @@ class Mechanics {
 
   // This builds the current query in full and makes the call to execute it
   buildQuery() {
-    let query;
-    // get the template for the current CRUD operation the user wants to perform
-    query = this.templates()[this.operation];
+    // build query only if `this.operation` is not set to `custom`
+    if (this.operation !== 'custom') {
+      let query;
+      // get the template for the current CRUD operation the user wants to perform
+      query = this.templates()[this.operation];
 
-    // ** check which sub actions have been called - check the chain property **
-    if (this.chain.where) {
-      query += ` ${this.restrictionString}`;
+      // ** check which sub actions have been called - check the chain property **
+      if (this.chain.where) {
+        query += ` ${this.restrictionString}`;
+      }
+
+      if (this.chain.group) {
+        query += ` ${this.groupByString}`;
+      }
+
+      if (this.chain.order) {
+        query += ` ${this.orderByString}`;
+      }
+
+      if (this.chain.limit) {
+        query += ` ${this.limitString}`;
+      }
+
+      if (this.operation === 'create' || this.operation === 'update') {
+        query += `  ${this.toReturnFields}`;
+      }
+
+      // set the final queryString to be executed
+      this.queryString = query;
     }
-
-    if (this.chain.group) {
-      query += ` ${this.groupByString}`;
-    }
-
-    if (this.chain.order) {
-      query += ` ${this.orderByString}`;
-    }
-
-    if (this.chain.limit) {
-      query += ` ${this.limitString}`;
-    }
-
-    if (this.operation === 'create' || this.operation === 'update') {
-      query += `  ${this.toReturnFields}`;
-    }
-
-    // set the final queryString to be executed
-    this.queryString = query;
   }
 
   // this check the operator of each value, extracts the operator and returns the actual value

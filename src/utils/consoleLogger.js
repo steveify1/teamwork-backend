@@ -5,15 +5,16 @@ require('dotenv').config();
  * is set to 'development'
  */
 class consoleLogger {
-  static log({ name, stack, message }) {
-    const env = process.env.NODE_ENV;
-    if (env && env === 'development') {
+  static log({ stack, message }) {
+    if (process.env.NODE_ENV === 'development' && process.env.CONSOLE_LOGS) {
       // eslint-disable-next-line no-console
-      console.table([
-        name,
-        message,
-        stack,
-      ]);
+      console.log('');
+      console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+      console.log(message);
+      console.log('--- Stack Trace ------------------------');
+      console.log(stack);
+      console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+      console.log('');
     }
   }
 }

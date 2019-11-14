@@ -212,6 +212,20 @@ class Model extends Mechanics {
       return `Unable to fetch object: ${message}`;
     }
   }
+
+  // This lets the user make custom queries
+  async custom(customQuery, data) {
+    // set the operation to custom
+    this.setOperation('custom');
+
+    // set the query string to the custom query string
+    this.queryString = customQuery;
+
+    // set the data array to the data array accompanying the custom query
+    this.values = data;
+
+    await this.exec();
+  }
 }
 
 module.exports = Model;
