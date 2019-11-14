@@ -196,6 +196,22 @@ class Model extends Mechanics {
       return `Unable to fetch object: ${message}`;
     }
   }
+
+  // update a row in a relation
+  async deleteById(id) {
+    try {
+      if (!id) { throw new Error('id must be given'); }
+
+      // create prepared statement
+      this.delete({ id });
+
+      // execute the query
+      return await this.exec();
+    } catch ({ stack, message }) {
+      console.log(stack, message);
+      return `Unable to fetch object: ${message}`;
+    }
+  }
 }
 
 module.exports = Model;

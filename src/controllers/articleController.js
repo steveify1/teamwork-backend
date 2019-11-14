@@ -57,7 +57,7 @@ exports.updateArticle = async (req, res) => {
   const articleId = req.params.id;
 
   try {
-    // check that the article id is given
+    // check that the article id is valid
     if (!Number.parseInt(articleId, 10)) { throw new ResponseError(400, 'Article identifier malformed'); }
 
     // check that the article title is not empty
@@ -95,7 +95,34 @@ exports.updateArticle = async (req, res) => {
       createdOn: result.timestamp,
     });
   } catch (error) {
-    console.log(error.stack);
+    consoleLogger.log(error);
+    sendResponse(res, error.statusCode, 'error', error.message);
+  }
+};
+
+exports.deleteArticle = async (req, res) => {
+  try {
+    const articleId = req.params.id;
+    // check if the article id is valid
+    if (!Number.parseInt(articleId, 10)) { throw new ResponseError(400, 'Article identifier malformed'); }
+
+    // check the article table if the given article exists
+    const { rowCount, rows } = await Article.findById(articleId);
+
+    if (!rowCount) { throw new ResponseError(404, 'The article you want to delete seems to missing'); }
+
+    const { userId } = req.body;
+
+    // check that the user id is the same as the article author id before permitting delete
+    if (rows[0].author_id !== userId) { throw new ResponseError(401, 'You don\'t have permissions to delete this post'); }
+
+    // delete the post if the above conditions are false and execution reaches here.
+    await Article.deleteById(articleId);
+
+    // send success response to the client
+    sendResponse(res, 202, 'success', { message: 'Article successfully deleted' });
+  } catch (error) {
+    consoleLogger.log(error);
     sendResponse(res, error.statusCode, 'error', error.message);
   }
 };
