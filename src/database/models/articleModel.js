@@ -10,8 +10,8 @@ class Article extends Model {
   async create(data) {
     const query = `
       INSERT INTO ${this.relation}
-      (title, article, slug, tags, author_id, _timestamp)
-      values ($1, $2, $3, $4, $5, $6) RETURNING id, title, slug, article, tags, author_id, _timestamp`;
+      (title, article, slug, tags, author_id, timestamp)
+      values ($1, $2, $3, $4, $5, $6) RETURNING id, title, slug, article, tags, author_id, timestamp`;
 
     // check for article tags
     let tags = { values: [] };

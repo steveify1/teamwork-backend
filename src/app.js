@@ -17,5 +17,4 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Set up routes
 app.use('/api', routes);
 
-
 module.exports = app;

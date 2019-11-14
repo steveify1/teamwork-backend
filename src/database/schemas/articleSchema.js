@@ -9,5 +9,5 @@ module.exports = Schema('articles', () => `
     slug VARCHAR UNIQUE NOT NULL,
     tags JSON,
     author_id INTEGER REFERENCES users(id),
-    _timestamp VARCHAR NOT NULL);
+    timestamp VARCHAR NOT NULL);
 `);

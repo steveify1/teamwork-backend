@@ -1,16 +1,164 @@
 /* eslint-disable class-methods-use-this */
-const pgClient = require('../../config/db');
+const Mechanics = require('./mechanics');
 
-class Model {
+class Model extends Mechanics {
   constructor(relation) {
-    this.relation = relation;
-    this.DB = pgClient;
+    super(relation);
+
+    // this will be sent back to theclient
+    this.response = {};
+  }
+
+  // create() {
+  //   // set opereation
+  //   this.setOperation('create');
+  // }
+
+  find(props, projection) {
+    // set opereation
+    this.setOperation('find');
+
+    // set projection
+    this.setProjection(projection);
+    // set restrictionString and value
+    this.where(props);
+    return this;
+  }
+
+  update(identifier, props) {
+    // set opereation
+    this.setOperation('update');
+
+    this.setUpdateFields(props);
+
+    this.where(identifier);
+    return this;
+  }
+
+  delete(prop) {
+    // set opereation
+    this.setOperation('delete');
+
+    this.where(prop);
+    return this;
+  }
+
+  /* ***** where CHAIN ***** */
+
+  where(props) {
+    this.chain.where = true;
+    // set restrictionString and value
+    if (props) {
+      this.setRestriction(props);
+    }
+    return this;
+  }
+
+  /* ***** limit CHAIN ***** */
+  limit(limit) {
+    this.chain.limit = true;
+    // set limit
+    this.setLimit(limit);
+    return this;
+  }
+
+  composeLimit() {
+    const limit = this.rowsLimit.map((l, i) => `$${this.numItemsInValues + i + 1}`).join(' ');
+    // update the 'this.values' array
+    this.setValues(this.rowsLimit);
+    return `LIMIT ${limit}`;
+  }
+
+  // sets row limit. Expects 'limit' argument to be an array of at most 2 values
+  setLimit(limit) {
+    const { length } = limit;
+    if (!length || length > 2) { throw new Error('array must contain at most 2 values'); }
+    if (length === 1) { this.rowsLimit[1] = limit[0]; }
+    if (length === 2) {
+      this.rowsLimit[0] = limit[0];
+      this.rowsLimit[1] = limit[1];
+    }
+
+    this.limitString = this.composeLimit();
+  }
+
+  /* ***** groupBy CHAIN ***** */
+  groupBy(prop) {
+    this.chain.group = true;
+    this.groupByString = `GROUP BY $${this.numItemsInValues + 1}`;
+    // update the 'this.values' array
+    this.setValues([prop]);
+    return this;
+  }
+
+  /* ***** groupBy CHAIN ***** */
+  /* 'prop' can be a string or an object where its key reps a table attribute
+  // and its value is the order(i.e ASC or DESC). If 'prop' is a string, it reps
+  // a table attribute, and this time the function falls back to use the DESC order
+  */
+  orderBy(prop) {
+    this.chain.order = true;
+    this.orderByString = this.composeOrderBy(prop);
+    return this;
+  }
+
+  composeOrderBy(prop) {
+    let composition = '';
+
+    // check if 'prop' is passed as an object
+    if (prop instanceof Object) {
+      const entries = Object.entries(prop)[0];
+
+      // push each of the user's values in the 'this.values' array
+      entries.forEach((key, i) => {
+        i += 1;
+        composition += ` $${this.numItemsInValues + i}`;
+      });
+
+      // update the 'this.values' array
+      this.setValues(entries);
+    } else {
+      composition = ` $${this.numItemsInValues + 1} DESC`;
+      // update the 'this.values' array
+      this.setValues([prop]);
+    }
+
+    return `ORDER BY${composition}`;
+  }
+
+  // This executes the query and returns a response
+  async exec() {
+    try {
+      // generate queryString
+      this.buildQuery();
+      // eslint-disable-next-line prefer-destructuring
+      const values = this.values;
+      // eslint-disable-next-line prefer-destructuring
+      const queryString = this.queryString;
+
+      // send query to database
+      const { rows, rowCount } = await this.DB.query(queryString, values);
+
+      // end the transaction!
+      this.end(); // This resets all properties in this class (except `this.relation`);
+
+      // send a response
+      return {
+        queryString,
+        values,
+        rows,
+        rowCount,
+      };
+    } catch (error) {
+      console.log(error.stack, error.message);
+      return `Unable to complete this transaction: ${error}`;
+    }
   }
 
   async findById(id, projection) {
     try {
       if (!id) { throw new Error('id must be given'); }
-      return await this.findByProps(id, projection);
+      return await this.findByProps({ id }, projection);
     } catch ({ message }) {
       return `Unable to fetch object: ${message}`;
     }
@@ -22,14 +170,8 @@ class Model {
 
       if (!Object.keys(props).length) { throw new Error('no attribute provided'); }
 
-      const { restrictionString, values } = this.getRestriction(props);
-      projection = this.getProjection(projection);
-
-      // generate the query string
-      const query = `SELECT ${projection} FROM ${this.relation} WHERE ${restrictionString};`;
-
-      // execute the actual query
-      return await this.DB.query(query, values);
+      this.find(props, projection);
+      return await this.exec();
     } catch ({ message }) {
       return `Unable to fetch object: ${message}`;
     }
@@ -44,42 +186,18 @@ class Model {
 
       if (!Object.keys(props).length) { throw new Error('no attribute provided'); }
 
-      const { restrictionString, values } = this.getRestriction(props);
-      // generate query string
-      const query = `UPDATE ${this.relation} SET ${restrictionString} WHERE id=${values.length + 1}`;
+      // create prepared statement
+      this.update({ id }, props);
 
-
-      return await this.DB.query(query, [...values, id]);
-    } catch ({ message }) {
+      // execute the query
+      return await this.exec();
+    } catch ({ stack, message }) {
+      console.log(stack, message);
       return `Unable to fetch object: ${message}`;
     }
-  }
-
-  // convert the array of projections into a single seperated by a comma, if it's an array
-  getProjection(projection) {
-    // Checking that projections were supplied - i.e that 'projection' is defined
-    return projection && projection.length ? projection.join(', ') : '*';
-  }
-
-  // generate the restriction string and corresponding values
-  getRestriction(props) {
-    const values = [];
-    const keys = Object.keys(props);
-    let restrictionString = '';
-
-    keys.forEach((key, i) => {
-      i += 1;
-      if (i > 1) { restrictionString += ' AND '; }
-      restrictionString += `${key}=$${i}`;
-      values.push(props[key]);
-    });
-
-    return {
-      restrictionString,
-      values,
-    };
   }
 }
 
 module.exports = Model;
 
+// const article = new Model('users');

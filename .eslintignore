@@ -1,5 +1,6 @@
 # mock json-type data format for unit tests
 src/tests/mockData/
+src/tests/model.spec.js
 
 # node_modules
 node_modules/
