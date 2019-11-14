@@ -19,7 +19,7 @@ module.exports = (method, uri, headers, body, callback) => {
 
   const options = {
     uri: uri,
-    body: body,
+    body: body || {},
     json: true,
   };
 
