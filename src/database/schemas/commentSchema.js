@@ -6,5 +6,6 @@ module.exports = Schema('comments', () => `
     id SERIAL PRIMARY KEY,
     comment TEXT NOT NULL,
     author_id INTEGER NOT NULL,
-    post_id INTEGER NOT NULL);
+    post_id INTEGER NOT NULL,
+    _timestamp VARCHAR NOT NULL);
 `);

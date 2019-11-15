@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const Article = require('../database/models/articleModel');
-// const Comment = require('../database/models/commentModel');
+const Comment = require('../database/models/commentModel');
 // const Category = require('../database/models/categoryModel');
 const ResponseError = require('../utils/responseError');
 const sendResponse = require('../utils/sendResponse');
@@ -59,7 +59,9 @@ exports.createArticle = async (req, res) => {
 
       // check if category exists in db
       // const isCategory = await Category.findByProps({ category });
-      // if (!isCategory.rowCount) { throw new ResponseError(400, 'Selected category is unavailabe'); }
+      // if (!isCategory.rowCount) {
+      //   throw new ResponseError(400, 'Selected category is unavailabe');
+      // }
       // clientData.category_id = isCategory.rows[0].id;
     }
 
@@ -181,6 +183,52 @@ exports.deleteArticle = async (req, res) => {
 
     // send success response to the client
     sendResponse(res, 202, 'success', { message: 'Article successfully deleted' });
+  } catch (error) {
+    consoleLogger.log(error);
+    sendResponse(res, error.statusCode, 'error', error.message);
+  }
+};
+
+// Post Comments
+exports.postComment = async (req, res) => {
+  const clientData = req.body;
+  const { articleId } = req.params;
+  try {
+    // check that the comment is not empty
+    if (!clientData.comment) { throw new ResponseError(400, 'Please provide a comment'); }
+
+    // check that article exists
+    const isArticle = await Article.findById(articleId);
+
+    if (isArticle.rowCount === 0) { throw new ResponseError(404, 'Oops! Article does not exist'); }
+
+    // post comment
+    const result = await Comment.create({
+      articleId,
+      comment: clientData.comment,
+      userId: clientData.userId,
+    });
+
+    const {
+      article,
+      title,
+      id,
+    } = isArticle.rows[0];
+
+    const {
+      comment,
+      _timestamp,
+    } = result;
+
+    // send response
+    sendResponse(res, 201, 'success', {
+      message: 'Comment successfully created',
+      articleId: id,
+      title,
+      article,
+      comment,
+      createdOn: _timestamp,
+    });
   } catch (error) {
     consoleLogger.log(error);
     sendResponse(res, error.statusCode, 'error', error.message);
