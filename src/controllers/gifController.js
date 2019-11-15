@@ -10,30 +10,33 @@ const consoleLogger = require('../utils/consoleLogger');
 
 // Get GIF
 exports.getGif = async (req, res) => {
-  // const { gifId } = req.params;
-  // try {
-  //   // check that the gif id is valid
-  //   if (!Number.parseInt(gifId, 10)) { throw new ResponseError(400, 'gif identifier malformed'); }
+  const { gifId } = req.params;
+  try {
+    // check that the gif id is valid
+    if (!Number.parseInt(gifId, 10)) { throw new ResponseError(400, 'gif identifier malformed'); }
 
-  //   // check if the gif exists and return it with its associated comments
-  //   const { rowCount, rows } = await Gif.findById(gifId);
+    // check if the gif exists and return it with its associated comments
+    const { rowCount, rows } = await Gif.findById(gifId);
 
-  //   if (!rowCount) { throw new ResponseError(404, 'Oops! gif does not exist'); }
+    if (!rowCount) { throw new ResponseError(404, 'Oops! gif does not exist'); }
 
-  //   // if there is no error and execution reaches this point..
-  //   const data = rows[0];
-  //   sendResponse(res, 200, 'success', {
-  //     id: data.id,
-  //     title: data.title,
-  //     imageUrl: data.image_url,
-  //     authorId: data.author_id,
-  //     createdOn: data.timestamp,
-  //     comments: [],
-  //   }, null);
-  // } catch (error) {
-  //   consoleLogger.log(error);
-  //   sendResponse(res, error.statusCode, 'error', error.message);
-  // }
+    // get comments
+    const comments = await Comment.findByProps({ post_id: rows[0].id });
+
+    // if there is no error and execution reaches this point..
+    const data = rows[0];
+    sendResponse(res, 200, 'success', {
+      id: data.id,
+      title: data.title,
+      imageUrl: data.image_url,
+      authorId: data.author_id,
+      createdOn: data.timestamp,
+      comments: comments.rows,
+    }, null);
+  } catch (error) {
+    consoleLogger.log(error);
+    sendResponse(res, error.statusCode, 'error', error.message);
+  }
 };
 
 // CREATE A NEW GIF
