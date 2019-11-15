@@ -6,7 +6,7 @@ require('dotenv').config();
  */
 class consoleLogger {
   static log({ stack, message }) {
-    console.log(process.env.NODE_ENV);
+    console.log('state');
     // if (process.env.NODE_ENV === 'development') {
     //   // eslint-disable-next-line no-console
     //   console.log('');
