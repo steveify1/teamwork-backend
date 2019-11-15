@@ -1,0 +1,127 @@
+/* eslint-disable camelcase */
+require('../middlewares/cloudinary');
+const cloudinary = require('cloudinary');
+const Comment = require('../database/models/commentModel');
+const Gif = require('../database/models/gifModel');
+// const Category = require('../database/models/categoryModel');
+const ResponseError = require('../utils/responseError');
+const sendResponse = require('../utils/sendResponse');
+const consoleLogger = require('../utils/consoleLogger');
+
+// Get GIF
+exports.getGif = async (req, res) => {
+  // const { gifId } = req.params;
+  // try {
+  //   // check that the gif id is valid
+  //   if (!Number.parseInt(gifId, 10)) { throw new ResponseError(400, 'gif identifier malformed'); }
+
+  //   // check if the gif exists and return it with its associated comments
+  //   const { rowCount, rows } = await Gif.findById(gifId);
+
+  //   if (!rowCount) { throw new ResponseError(404, 'Oops! gif does not exist'); }
+
+  //   // if there is no error and execution reaches this point..
+  //   const data = rows[0];
+  //   sendResponse(res, 200, 'success', {
+  //     id: data.id,
+  //     title: data.title,
+  //     imageUrl: data.image_url,
+  //     authorId: data.author_id,
+  //     createdOn: data.timestamp,
+  //     comments: [],
+  //   }, null);
+  // } catch (error) {
+  //   consoleLogger.log(error);
+  //   sendResponse(res, error.statusCode, 'error', error.message);
+  // }
+};
+
+// CREATE A NEW GIF
+exports.createGif = async (req, res) => {
+  const clientData = req.body;
+  const { file } = req;
+  const ext = file.mimetype.split('/')[1];
+
+  try {
+    // check that the gif title is not missing
+    if (!clientData.title) {
+      throw new ResponseError(400, 'Missing gif title');
+    }
+
+    // check file extension
+    if (ext !== 'gif') {
+      throw new ResponseError(400, 'Wrong file type. Please, upload a gif image');
+    }
+
+    // Attempt to upload file
+    const upload = await cloudinary.v2.uploader.upload(file.path);
+
+    clientData.imageUrl = upload.secure_url;
+
+    // if everything else is good, post data to db
+    let result = await Gif.create(clientData);
+
+    // extract the returned
+    result = result.rows[0];
+
+
+    // send success response
+    sendResponse(res, 201, 'success', {
+      message: 'Gif image successfully posted',
+      gifId: result.id,
+      title: result.title,
+      imageUrl: result.image_url,
+      authorId: result.author_id,
+      createdOn: result.timestamp,
+    });
+  } catch (error) {
+    consoleLogger.log(error);
+    sendResponse(res, error.statusCode, 'error', error.message);
+  }
+};
+
+// Post Comments
+// exports.postComment = async (req, res) => {
+//   const clientData = req.body;
+//   const { articleId } = req.params;
+//   try {
+//     // check that the comment is not empty
+//     if (!clientData.comment) { throw new ResponseError(400, 'Please provide a comment'); }
+
+//     // check that article exists
+//     const isArticle = await Gif.findById(articleId);
+
+//     if (isArticle.rowCount === 0) { throw new ResponseError(404, 'Oops! Article does not exist'); }
+
+//     // post comment
+//     const result = await Comment.create({
+//       gifId,
+//       comment: clientData.comment,
+//       userId: clientData.userId,
+//     });
+
+//     const {
+//       gif,
+//       title,
+//       id,
+//     } = isArticle.rows[0];
+
+//     const {
+//       comment,
+//       _timestamp,
+//     } = result[0];
+
+//     // send response
+//     sendResponse(res, 201, 'success', {
+//       message: 'Comment successfully created',
+//       articleId: id,
+//       title,
+//       article,
+//       comment,
+//       createdOn: _timestamp,
+//     });
+//   } catch (error) {
+//     consoleLogger.log(error);
+//     sendResponse(res, error.statusCode, 'error', error.message);
+//   }
+// };

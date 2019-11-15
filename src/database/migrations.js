@@ -2,6 +2,7 @@
 const userSchema = require('./schemas/userSchema');
 const articleSchema = require('./schemas/articleSchema');
 const commentSchema = require('./schemas/commentSchema');
+const gifSchema = require('./schemas/gifSchema');
 // const categorySchema = require('./schemas/categorySchema');
 // const postTypeSchema = require('./schemas/postTypeSchema');
 
@@ -14,8 +15,11 @@ module.exports = async () => {
     // await postTypeSchema();
     await articleSchema();
     await commentSchema();
+    await gifSchema();
+
+    // populate default tables
     console.log('Done with migration');
   } catch (e) {
-    console.log(`Beep beep ::: ${e}`);
+    console.log(`An Error Occurred::: ${e}`);
   }
 };

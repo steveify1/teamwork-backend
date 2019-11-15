@@ -1,9 +1,10 @@
 const { Router } = require('express');
-const authorization = require('../../middlewares/authorization');
+const auth = require('../../middlewares/authorization');
 
 // Importing endpoints to application resources
 const authRoute = require('./authRoute');
 const articleRoute = require('./articleRoute');
+const gifRoute = require('./gifRoute');
 
 const router = Router();
 
@@ -11,7 +12,10 @@ const router = Router();
 router.use('/auth', authRoute);
 
 // Article Route
-router.use('/articles', authorization, articleRoute);
+router.use('/articles', auth, articleRoute);
+
+// Gif Route
+router.use('/gifs', auth, gifRoute);
 
 // Exposing API version
 module.exports = router;

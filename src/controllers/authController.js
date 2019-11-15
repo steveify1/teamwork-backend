@@ -48,7 +48,7 @@ exports.signUp = async (req, res) => {
           firstName: firstname,
           avatar,
         });
-      }).catch((error) => sendResponse(res, 400, 'error', `Unable to pous article. Please try again${error}`));
+      }).catch((error) => sendResponse(res, 400, 'error', 'Email already exists'));
   } catch (error) {
     consoleLogger.log(error);
     sendResponse(res, error.statusCode, 'error', error.message);
