@@ -17,6 +17,9 @@ exports.getArticle = async (req, res) => {
 
     if (!rowCount) { throw new ResponseError(404, 'Oops! Article does not exist'); }
 
+    // get comments
+    const comments = await Comment.findByProps({ post_id: rows[0].id });
+
     // if there is no error and execution reaches this point..
     const data = rows[0];
     sendResponse(res, 200, 'success', {
@@ -24,7 +27,7 @@ exports.getArticle = async (req, res) => {
       title: data.title,
       article: data.article,
       createdOn: data.timestamp,
-      comments: [],
+      comments: comments.rows,
     }, null);
   } catch (error) {
     consoleLogger.log(error);
