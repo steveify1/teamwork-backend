@@ -4,14 +4,15 @@
  */
 module.exports = (res, statusCode, status, data) => {
   // if the error was raised my an unhandled part our application, set statusCode to 500
+  const code = statusCode || 500;
 
   if (status === 'success') {
-    res.status(statusCode).json({
+    res.status(code).json({
       status: status,
       data: data,
     });
   } else {
-    res.status(statusCode).json({
+    res.status(code).json({
       status: status,
       error: data,
     });

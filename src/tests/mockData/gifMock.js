@@ -1,9 +1,7 @@
-const fs = require('fs');
-
 exports.authorAccount = {
 	"firstName": "rositta",
 	"lastName": "the author",
-	"email": "theauthorarticle@gmail.com",
+	"email": "theauthorgife@gmail.com",
 	"password": "test",
 	"confirmPassword": "test",
 	"gender": "female",
