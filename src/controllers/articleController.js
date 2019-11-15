@@ -218,7 +218,7 @@ exports.postComment = async (req, res) => {
     const {
       comment,
       _timestamp,
-    } = result;
+    } = result[0];
 
     // send response
     sendResponse(res, 201, 'success', {

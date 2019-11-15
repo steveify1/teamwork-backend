@@ -23,7 +23,7 @@ class Comment extends Model {
     // execute the query
     try {
       const { rows } = await this.DB.query(query, values);
-      return rows[0];
+      return rows;
     } catch (error) {
       consoleLogger.log(error);
       return `Unable to create comment::: ${error}`;
