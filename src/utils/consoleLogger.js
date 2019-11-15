@@ -6,16 +6,17 @@ require('dotenv').config();
  */
 class consoleLogger {
   static log({ stack, message }) {
-    if (process.env.NODE_ENV === 'development' && process.env.CONSOLE_LOGS) {
-      // eslint-disable-next-line no-console
-      console.log('');
-      console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-      console.log(message);
-      console.log('--- Stack Trace ------------------------');
-      console.log(stack);
-      console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-      console.log('');
-    }
+    console.log(process.env.NODE_ENV);
+    // if (process.env.NODE_ENV === 'development') {
+    //   // eslint-disable-next-line no-console
+    //   console.log('');
+    //   console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+    //   console.log(message);
+    //   console.log('--- Stack Trace ------------------------');
+    //   console.log(stack);
+    //   console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+    //   console.log('');
+    // }
   }
 }
 

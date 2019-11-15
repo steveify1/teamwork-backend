@@ -114,18 +114,22 @@ exports.updateArticle = async (req, res) => {
 
     if (!isArticle.rowCount) { throw new ResponseError(404, 'Oops! The article you want to update seems to missing'); }
 
-    const { userId } = req.body;
+    // const { userId } = req.body;
 
-    // check that the user id is the same as the article author id before permitting delete
-    if (isArticle.rows[0].author_id !== userId) { throw new ResponseError(401, 'You don\'t have permissions to update this post'); }
+    // check that the user id is the same as the article author id before permitting updating
+    // if (isArticle.rows[0].author_id !== userId) {
+    //   throw new ResponseError(401, 'You don\'t have permissions to update this post');
+    // }
 
     // check if the article title is still unique
-    const isArticleUnique = await Article.findByProps({
-      title: clientData.title,
-      id: `!${articleId}`,
-    });
+    // const isArticleUnique = await Article.findByProps({
+    //   title: clientData.title,
+    //   id: `!${articleId}`,
+    // });
 
-    if (isArticleUnique.rowCount) { throw new ResponseError(400, 'Article title must be unique'); }
+    // if (isArticleUnique.rowCount) {
+    //   throw new ResponseError(400, 'Article title must be unique');
+    // }
 
     // ****** if everything else is good, post data to db ******
 
