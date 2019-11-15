@@ -21,6 +21,16 @@ globalSpec('Gifs', () => {
     image: fs.createReadStream(`${__dirname}/mockData/staticFiles/sample.gif`),
   };
 
+  const gifData3 = {
+    title: 'title 3',
+    image: fs.createReadStream(`${__dirname}/mockData/staticFiles/sample.gif`),
+  };
+
+  const gifData4 = {
+    title: 'title 4',
+    image: fs.createReadStream(`${__dirname}/mockData/staticFiles/sample.gif`),
+  };
+
   const wrongGifImage = {
     title: 'title',
     image: fs.createReadStream(`${__dirname}/mockData/staticFiles/javascript-wallpaper.jpg`),
@@ -138,6 +148,65 @@ globalSpec('Gifs', () => {
       requests(method, `${endpoint}/jsuiere232`, headers, null, (error, response, body) => {
         expect(response.statusCode).toEqual(400);
         expect(body.error).toBe('gif identifier malformed');
+        done();
+      });
+    });
+  });
+
+
+  // DELETE ARTICLE
+  describe('DELETE /api/v1/gifs/:id', () => {
+    const method = 'delete';
+    let endpoint1;
+
+    beforeAll((done) => {
+      // Create an article to be utilized by the rest of the suite.
+      request.post({
+        uri: endpoint,
+        headers,
+        formData: gifData3,
+      }, (error, response, body) => {
+        expect(response.statusCode).toEqual(201);
+        body = JSON.parse(body);
+        console.log(body);
+
+        // add the gif ID to the main endpoint point to make endpoint 2
+        endpoint1 = `${endpoint}/${body.data.gifId}`;
+        done();
+      });
+    });
+
+    it('should return a 202 status code if the post is successfully deleted', (done) => {
+      requests(method, endpoint1, headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(202);
+        expect(body.status).toBe('success');
+        expect(body.data.message).toBe('Gif post successfully deleted');
+        done();
+      });
+    });
+
+    it('should return a 400 status code if article id is invalid', (done) => {
+      requests(method, '/api/v1/gifs/hello', headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(400);
+        expect(body.status).toBe('error');
+        expect(body.error).toBe('Gif identifier malformed');
+        done();
+      });
+    });
+
+    it('should return a 404 status code if gif does not exist', (done) => {
+      requests(method, '/api/v1/gifs/9999', headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(404);
+        expect(body.status).toBe('error');
+        expect(body.error).toBe('Oops! The gif you want to delete seems to missing');
+        done();
+      });
+    });
+
+    it('should return 401 status code if no `token` header is supplied', (done) => {
+      requests(method, endpoint1, null, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(401);
+        expect(body.error).toBe('Please, sign up or log in to your account.');
         done();
       });
     });

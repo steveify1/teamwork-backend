@@ -83,6 +83,31 @@ exports.createGif = async (req, res) => {
   }
 };
 
+
+// Delete Gif
+exports.deleteGif = async (req, res) => {
+  try {
+    const { gifId } = req.params;
+    // check if the gif id is valid
+    if (!Number.parseInt(gifId, 10)) { throw new ResponseError(400, 'Gif identifier malformed'); }
+
+    // check the gif table if the given gif exists
+    const { rowCount } = await Gif.findById(gifId);
+
+    if (!rowCount) { throw new ResponseError(404, 'Oops! The gif you want to delete seems to missing'); }
+
+    // delete the post if the above conditions are false and execution reaches here.
+    await Gif.deleteById(gifId);
+
+    // send success response to the client
+    sendResponse(res, 202, 'success', { message: 'Gif post successfully deleted' });
+  } catch (error) {
+    consoleLogger.log(error);
+    sendResponse(res, error.statusCode, 'error', error.message);
+  }
+};
+
+
 // Post Comments
 // exports.postComment = async (req, res) => {
 //   const clientData = req.body;
