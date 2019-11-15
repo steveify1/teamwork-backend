@@ -8,9 +8,6 @@ module.exports = async (req, res, next) => {
     // verify that the token header is defined and not empty
     if (!token) { throw new Error('Please, sign up or log in to your account.'); }
 
-    // check that the value of the authorixation header is of type string
-    if (typeof token !== 'string') { throw new Error('Invalid token'); }
-
     // verify that the client's token is not empty
 
     // verify the client's token with JWT
