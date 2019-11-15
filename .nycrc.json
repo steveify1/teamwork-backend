@@ -1,5 +1,5 @@
 {
   "exclude": [
-    "src/database/models"
+    "src/database/"
   ]
 }
