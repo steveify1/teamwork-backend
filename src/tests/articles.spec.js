@@ -1,4 +1,3 @@
-const slugify = require('slugify');
 const globalSpec = require('./index.spec');
 const request = require('../utils/requests');
 const pgCLient = require('../config/db');
@@ -10,6 +9,7 @@ const {
   completeArticleData2,
   completeArticleData3,
   completeArticleData4,
+  completeArticleData5,
   completeArticleUpdate,
   noArticleTitle,
   noArticleBody,
@@ -55,7 +55,6 @@ globalSpec('Articles', () => {
         expect(body.status).toBe('success');
         expect(body.data.articleId).toBeDefined();
         expect(body.data.message).toBe('Article successfully posted');
-        expect(body.data.slug).toBe(slugify(completeArticleData.title).toLowerCase());
         done();
       });
     });
@@ -96,10 +95,10 @@ globalSpec('Articles', () => {
       });
     });
 
-    it('should return an empty value for the article tags if no tags are supplied', (done) => {
+    it('should return an empty value for the article category if no category are supplied', (done) => {
       request(method, endpoint, headers, noArticleTags, (error, response, body) => {
         expect(response.statusCode).toEqual(201);
-        expect(body.data.tags.values.length).toBe(0);
+        expect(body.data.category).toBeUndefined();
         done();
       });
     });
@@ -130,6 +129,81 @@ globalSpec('Articles', () => {
 
     it('should return a 400 status code if the bearer token is not of type string', (done) => {
       request(method, endpoint, malformedToken, completeArticleData, (error, response, body) => {
+        expect(response.statusCode).toEqual(401);
+        expect(body.error).toBe('jwt malformed');
+        done();
+      });
+    });
+  });
+
+
+  // GET SINGLE ARTICLE
+  describe('GET /api/v1/articles/:id', () => {
+    const method = 'get';
+    let endpoint;
+
+    beforeAll((done) => {
+      // Create an article to be utilized by the rest of the suite.
+      request('post', '/api/v1/articles', headers, completeArticleData5, (error, response, body) => {
+        // insert the article id into the endpoint
+        endpoint = `/api/v1/articles/${body.data.articleId}`;
+        done();
+      });
+    });
+
+    it('should return a 200 status code if article is returned successfully', (done) => {
+      request(method, endpoint, headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(200);
+        expect(body.status).toBe('success');
+        expect(body.data.id).toBeDefined();
+        done();
+      });
+    });
+
+    it('should return a 400 status code if article id is invalid', (done) => {
+      request(method, '/api/v1/articles/hello', headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(400);
+        expect(body.status).toBe('error');
+        expect(body.error).toBe('Article identifier malformed');
+        done();
+      });
+    });
+
+    it('should return a 404 status code if article does not exist', (done) => {
+      request(method, '/api/v1/articles/999999', headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(404);
+        expect(body.status).toBe('error');
+        expect(body.error).toBe('Oops! Article does not exist');
+        done();
+      });
+    });
+
+    it('should return 401 status code if no `token` header is supplied', (done) => {
+      request(method, endpoint, null, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(401);
+        expect(body.error).toBe('Please, sign up or log in to your account.');
+        done();
+      });
+    });
+
+    it('should return 401 status code if the bearer token is empty', (done) => {
+      request(method, endpoint, emptyToken, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(401);
+        expect(body.error).toBe('Please, sign up or log in to your account.');
+        done();
+      });
+    });
+
+    it('should return a 401 status code if the bearer token is invalid', (done) => {
+      request(method, endpoint, invalidToken, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(401);
+        expect(body.error).toBe('invalid signature');
+        done();
+      });
+    });
+
+    it('should return a 400 status code if the bearer token is not of type string', (done) => {
+      request(method, endpoint, malformedToken, null, (error, response, body) => {
         expect(response.statusCode).toEqual(401);
         expect(body.error).toBe('jwt malformed');
         done();
@@ -182,7 +256,7 @@ globalSpec('Articles', () => {
       request(method, '/api/v1/articles/999999', headers, completeArticleData2, (error, response, body) => {
         expect(response.statusCode).toEqual(404);
         expect(body.status).toBe('error');
-        expect(body.error).toBe('The article you want to update seems to missing');
+        expect(body.error).toBe('Oops! The article you want to update seems to missing');
         done();
       });
     });
@@ -268,7 +342,7 @@ globalSpec('Articles', () => {
         request('post', '/api/v1/articles', headers, completeArticleData3, (error, response, body) => {
           // insert the article id into the endpoint
           endpoint = `/api/v1/articles/${body.data.articleId}`;
-          
+
           // create another article by the same user
           request('post', '/api/v1/articles', headers, completeArticleData4, (err, res, bd) => {
             // insert the article id into the endpoint
@@ -280,11 +354,10 @@ globalSpec('Articles', () => {
     });
 
     it('should return a 401 status code if the user is not authorized to delete the post', (done) => {
-      request(method, endpoint2, headers2, { "name": "target" }, (error, response, body) => {
+      request(method, endpoint2, headers2, null, (error, response, body) => {
         expect(response.statusCode).toEqual(401);
         expect(body.status).toBe('error');
         expect(body.error).toBe('You don\'t have permissions to delete this post');
-        console.log(headers2.userId, 'helllllllo');
         done();
       });
     });
@@ -311,7 +384,7 @@ globalSpec('Articles', () => {
       request(method, '/api/v1/articles/999999', headers, null, (error, response, body) => {
         expect(response.statusCode).toEqual(404);
         expect(body.status).toBe('error');
-        expect(body.error).toBe('The article you want to delete seems to missing');
+        expect(body.error).toBe('Oops! The article you want to delete seems to missing');
         done();
       });
     });
