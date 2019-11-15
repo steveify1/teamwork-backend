@@ -4,6 +4,7 @@ const extractFile = require('../../middlewares/extractFile');
 const {
   createGif,
   getGif,
+  deleteGif,
   postComment,
 } = require('../../controllers/gifController');
 
@@ -13,7 +14,8 @@ router.route('/')
   .post(extractFile.single('image'), auth, createGif);
 
 router.route('/:gifId')
-  .get(getGif);
+  .get(auth, getGif)
+  .delete(auth, deleteGif);
 
 // router.route('/:gifId/comments')
 //   .post(postComment);
