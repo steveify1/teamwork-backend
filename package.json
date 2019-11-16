@@ -48,5 +48,8 @@
     "istanbul": "^0.4.5",
     "jasmine": "^3.5.0",
     "jasmine-console-reporter": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }
