@@ -207,7 +207,7 @@ exports.postComment = async (req, res) => {
 
     // post comment
     const result = await Comment.create({
-      articleId,
+      postId: articleId,
       comment: clientData.comment,
       userId: clientData.userId,
     });
@@ -215,7 +215,6 @@ exports.postComment = async (req, res) => {
     const {
       article,
       title,
-      id,
     } = isArticle.rows[0];
 
     const {
@@ -226,8 +225,7 @@ exports.postComment = async (req, res) => {
     // send response
     sendResponse(res, 201, 'success', {
       message: 'Comment successfully created',
-      articleId: id,
-      title,
+      articleTitle: title,
       article,
       comment,
       createdOn: _timestamp,

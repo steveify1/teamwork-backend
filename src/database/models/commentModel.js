@@ -15,7 +15,7 @@ class Comment extends Model {
 
     const values = [
       data.comment,
-      data.articleId,
+      data.postId,
       data.userId,
       new Date(),
     ];

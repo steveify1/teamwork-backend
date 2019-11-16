@@ -109,47 +109,44 @@ exports.deleteGif = async (req, res) => {
 
 
 // Post Comments
-// exports.postComment = async (req, res) => {
-//   const clientData = req.body;
-//   const { articleId } = req.params;
-//   try {
-//     // check that the comment is not empty
-//     if (!clientData.comment) { throw new ResponseError(400, 'Please provide a comment'); }
+exports.postComment = async (req, res) => {
+  const clientData = req.body;
+  const { gifId } = req.params;
+  try {
+    // check that the comment is not empty
+    if (!clientData.comment) { throw new ResponseError(400, 'Please provide a comment'); }
 
-//     // check that article exists
-//     const isArticle = await Gif.findById(articleId);
+    // check that gif exists
+    const isGif = await Gif.findById(gifId);
 
-//     if (isArticle.rowCount === 0) { throw new ResponseError(404, 'Oops! Article does not exist'); }
+    if (isGif.rowCount === 0) { throw new ResponseError(404, 'Oops! Gif does not exist'); }
 
-//     // post comment
-//     const result = await Comment.create({
-//       gifId,
-//       comment: clientData.comment,
-//       userId: clientData.userId,
-//     });
+    // post comment
+    const result = await Comment.create({
+      postId: gifId,
+      comment: clientData.comment,
+      userId: clientData.userId,
+    });
 
-//     const {
-//       gif,
-//       title,
-//       id,
-//     } = isArticle.rows[0];
+    // extract comment data
+    const {
+      comment,
+      _timestamp,
+    } = result[0];
 
-//     const {
-//       comment,
-//       _timestamp,
-//     } = result[0];
+    // extract gif data
+    const gif = isGif.rows[0];
 
-//     // send response
-//     sendResponse(res, 201, 'success', {
-//       message: 'Comment successfully created',
-//       articleId: id,
-//       title,
-//       article,
-//       comment,
-//       createdOn: _timestamp,
-//     });
-//   } catch (error) {
-//     consoleLogger.log(error);
-//     sendResponse(res, error.statusCode, 'error', error.message);
-//   }
-// };
+
+    // send response
+    sendResponse(res, 201, 'success', {
+      message: 'comment successfully created',
+      title: gif.title,
+      comment,
+      createdOn: _timestamp,
+    });
+  } catch (error) {
+    consoleLogger.log(error);
+    sendResponse(res, error.statusCode, 'error', error.message);
+  }
+};
