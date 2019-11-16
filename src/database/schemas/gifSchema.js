@@ -7,5 +7,5 @@ module.exports = Schema('gifs', () => `
     title VARCHAR NOT NULL,
     image_url VARCHAR,
     author_id INTEGER NOT NULL,
-    _timestamp VARCHAR NOT NULL);
+    timestamp VARCHAR NOT NULL);
 `);

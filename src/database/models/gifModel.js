@@ -10,8 +10,8 @@ class Gif extends Model {
   async create(data) {
     const query = `
       INSERT INTO ${this.relation}
-      (title, image_url, author_id, _timestamp)
-      values ($1, $2, $3, $4) RETURNING id, title, author_id, image_url, _timestamp`;
+      (title, image_url, author_id, timestamp)
+      values ($1, $2, $3, $4) RETURNING id, title, author_id, image_url, timestamp`;
 
     const values = [
       data.title,
