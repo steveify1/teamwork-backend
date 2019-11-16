@@ -26,11 +26,6 @@ globalSpec('Gifs', () => {
     image: fs.createReadStream(`${__dirname}/mockData/staticFiles/sample.gif`),
   };
 
-  const gifData4 = {
-    title: 'title 4',
-    image: fs.createReadStream(`${__dirname}/mockData/staticFiles/sample.gif`),
-  };
-
   const wrongGifImage = {
     title: 'title',
     image: fs.createReadStream(`${__dirname}/mockData/staticFiles/javascript-wallpaper.jpg`),

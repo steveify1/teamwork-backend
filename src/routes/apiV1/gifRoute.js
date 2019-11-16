@@ -17,7 +17,7 @@ router.route('/:gifId')
   .get(auth, getGif)
   .delete(auth, deleteGif);
 
-// router.route('/:gifId/comments')
-//   .post(postComment);
+router.route('/:gifId/comments')
+  .post(postComment);
 
 module.exports = router;
