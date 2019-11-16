@@ -5,7 +5,7 @@ require('dotenv').config();
  * is set to 'development'
  */
 class consoleLogger {
-  // static log({ stack, message }) {
+  static log() {
   //   console.log('state');
   // if (process.env.NODE_ENV === 'development') {
   // eslint-disable-next-line no-console
@@ -17,7 +17,7 @@ class consoleLogger {
   // console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
   // console.log('');
   // }
-  // }
+  }
 }
 
 module.exports = consoleLogger;
