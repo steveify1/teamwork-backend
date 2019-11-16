@@ -1,20 +1,17 @@
 const { Pool } = require('pg');
 
-const {
-  PG_USER,
-  PG_PASS,
-  PG_HOST,
-  PG_PORT,
-  PG_DB,
-} = process.env;
+// const {
+//   PG_USER,
+//   PG_PASS,
+//   PG_HOST,
+//   PG_PORT,
+//   PG_DB,
+// } = process.env;
 
 // The Database Setup
 const pgClient = new Pool({
-  user: PG_USER,
-  password: PG_PASS,
-  host: PG_HOST,
-  port: PG_PORT,
-  database: PG_DB,
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
 });
 
 pgClient.on('error', (e) => console.log(`Unable to connect to Postgres server./ See below.\n${e}`));
