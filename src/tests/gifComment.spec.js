@@ -30,7 +30,7 @@ globalSpec('Comments', () => {
   });
 
   afterAll(async (done) => {
-    await pgCLient.query('TRUNCATE gifs, users');
+    await pgCLient.query('TRUNCATE gifs, users, comments');
     done();
   });
 

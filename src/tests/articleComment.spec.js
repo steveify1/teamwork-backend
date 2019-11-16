@@ -23,7 +23,7 @@ globalSpec('Comments', () => {
   });
 
   afterAll(async (done) => {
-    await pgCLient.query('TRUNCATE articles, users');
+    await pgCLient.query('TRUNCATE articles, users, comments');
     done();
   });
 

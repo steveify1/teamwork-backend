@@ -5,6 +5,7 @@ const auth = require('../../middlewares/authorization');
 const authRoute = require('./authRoute');
 const articleRoute = require('./articleRoute');
 const gifRoute = require('./gifRoute');
+const feedRoute = require('./feedRoute');
 
 const router = Router();
 
@@ -16,6 +17,9 @@ router.use('/articles', auth, articleRoute);
 
 // Gif Route
 router.use('/gifs', auth, gifRoute);
+
+// Feeds Route
+router.use('/feeds', auth, feedRoute);
 
 // Exposing API version
 module.exports = router;
