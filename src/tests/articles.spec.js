@@ -466,9 +466,9 @@ globalSpec('Articles', () => {
     });
 
     it('should return a 400 status code if the selected category does not exist in the category table', (done) => {
-      // 'a' is not a default category in the categories table in the database of the application
-      request(method, `${endpoint}?tag=a`, headers, null, (error, response, body) => {
-        expect(response.statusCode).toEqual(400);
+      // 'aaaa' is not a default category in the categories table in the database of the application
+      request(method, `${endpoint}?tag=aaaa`, headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(404);
         expect(body.status).toBe('error');
         done();
       });
