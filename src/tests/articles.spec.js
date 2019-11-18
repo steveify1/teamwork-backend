@@ -10,11 +10,13 @@ const {
   completeArticleData3,
   completeArticleData4,
   completeArticleData5,
+  completeArticleData6,
   completeArticleUpdate,
   noArticleTitle,
   noArticleBody,
   invalidArticleBody,
   noArticleTags,
+  unavailableTag,
 } = require('./mockData/articlesMock');
 
 globalSpec('Articles', () => {
@@ -99,6 +101,13 @@ globalSpec('Articles', () => {
       request(method, endpoint, headers, noArticleTags, (error, response, body) => {
         expect(response.statusCode).toEqual(201);
         expect(body.data.category).toBeUndefined();
+        done();
+      });
+    });
+
+    it('should return a 400 status code if the category supplied does not exist in the categories table', (done) => {
+      request(method, endpoint, headers, unavailableTag, (error, response, body) => {
+        expect(response.statusCode).toEqual(400);
         done();
       });
     });

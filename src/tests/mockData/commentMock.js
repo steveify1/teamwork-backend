@@ -15,7 +15,7 @@ exports.authorAccount = {
 exports.completeArticleData = {
 	"title": "Article title for the boys",
 	"article": "hello folks. my name is steve and I am a web developer in need of Christ.r",
-	"category": "editorial"
+	"category": "finance"
 }
 
 exports.completeGifData = {
