@@ -2,7 +2,7 @@
   "name": "teamwork",
   "version": "1.0.0",
   "description": "An employee interaction web application built with Node JS, Express and Postgres",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text jasmine src/tests/*.spec.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
@@ -48,5 +48,8 @@
     "istanbul": "^0.4.5",
     "jasmine": "^3.5.0",
     "jasmine-console-reporter": "^3.1.0"
+  },
+  "engines": {
+    "node": "10.14.1"
   }
 }
