@@ -1,16 +1,18 @@
 const { Pool } = require('pg');
 
-// const {
-//   PG_USER,
-//   PG_PASS,
-//   PG_HOST,
-//   PG_PORT,
-//   PG_DB,
-// } = process.env;
+const {
+  PG_USER,
+  PG_PASS,
+  PG_HOST,
+  PG_PORT,
+  PG_DB,
+} = process.env;
+
+const localConnectionString = `postgres://${PG_USER}:${PG_PASS}@${PG_HOST}:${PG_PORT}/${PG_DB}`;
 
 // The Database Setup
 const pgClient = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL || localConnectionString,
   ssl: true,
 });
 
