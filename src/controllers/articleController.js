@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 const Article = require('../database/models/articleModel');
 const Comment = require('../database/models/commentModel');
-// const Category = require('../database/models/categoryModel');
+const Category = require('../database/models/categoryModel');
 const ResponseError = require('../utils/responseError');
 const sendResponse = require('../utils/sendResponse');
 const consoleLogger = require('../utils/consoleLogger');
@@ -61,11 +61,11 @@ exports.createArticle = async (req, res) => {
       console.log(category);
 
       // check if category exists in db
-      // const isCategory = await Category.findByProps({ category });
-      // if (!isCategory.rowCount) {
-      //   throw new ResponseError(400, 'Selected category is unavailabe');
-      // }
-      // clientData.category_id = isCategory.rows[0].id;
+      const isCategory = await Category.findByProps({ category });
+      if (!isCategory.rowCount) {
+        throw new ResponseError(400, 'Selected category is unavailabe');
+      }
+      clientData.categoryId = isCategory.rows[0].id;
     }
 
     // if everything else is good, post data to db
