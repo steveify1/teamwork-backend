@@ -63,7 +63,7 @@ exports.createArticle = async (req, res) => {
       // check if category exists in db
       const isCategory = await Category.findByProps({ category });
       if (!isCategory.rowCount) {
-        throw new ResponseError(400, 'Selected category is unavailabe');
+        throw new ResponseError(400, 'Selected category is unavailable');
       }
       clientData.categoryId = isCategory.rows[0].id;
     }
@@ -118,23 +118,6 @@ exports.updateArticle = async (req, res) => {
     const isArticle = await Article.findById(articleId);
 
     if (!isArticle.rowCount) { throw new ResponseError(404, 'Oops! The article you want to update seems to missing'); }
-
-    // const { userId } = req.body;
-
-    // check that the user id is the same as the article author id before permitting updating
-    // if (isArticle.rows[0].author_id !== userId) {
-    //   throw new ResponseError(401, 'You don\'t have permissions to update this post');
-    // }
-
-    // check if the article title is still unique
-    // const isArticleUnique = await Article.findByProps({
-    //   title: clientData.title,
-    //   id: `!${articleId}`,
-    // });
-
-    // if (isArticleUnique.rowCount) {
-    //   throw new ResponseError(400, 'Article title must be unique');
-    // }
 
     // ****** if everything else is good, post data to db ******
 
@@ -230,6 +213,30 @@ exports.postComment = async (req, res) => {
       comment,
       createdOn: _timestamp,
     });
+  } catch (error) {
+    consoleLogger.log(error);
+    sendResponse(res, error.statusCode, 'error', error.message);
+  }
+};
+
+exports.getByCategory = async (req, res) => {
+  const { tag } = req.query;
+  try {
+    // check if category exists
+    const { rowCount, rows } = await Category.findByProps({ category: tag });
+    if (!rowCount) { throw new ResponseError(404, 'Selected category is unavailable'); }
+
+    // get articles in the selected category
+    const result = await Article.findByProps({ category_id: rows[0].id });
+
+    // check if there is an existing article in the selected category
+    if (!result.rowCount) {
+      return sendResponse(res, 200, 'success', {
+        message: 'There is currently no article in selected category',
+      });
+    }
+    // send list of articles
+    sendResponse(res, 200, 'success', result.rows);
   } catch (error) {
     consoleLogger.log(error);
     sendResponse(res, error.statusCode, 'error', error.message);

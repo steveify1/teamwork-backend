@@ -5,12 +5,14 @@ const {
   updateArticle,
   deleteArticle,
   postComment,
+  getByCategory,
 } = require('../../controllers/articleController');
 
 const router = Router();
 
 router.route('/')
-  .post(createArticle);
+  .post(createArticle)
+  .get(getByCategory);
 
 router.route('/:articleId')
   .get(getArticle)
