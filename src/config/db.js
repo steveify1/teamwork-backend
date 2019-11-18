@@ -9,11 +9,12 @@ const {
 } = process.env;
 
 const localConnectionString = `postgres://${PG_USER}:${PG_PASS}@${PG_HOST}:${PG_PORT}/${PG_DB}`;
+const ssl = process.env.NODE_ENV === 'production';
 
 // The Database Setup
 const pgClient = new Pool({
   connectionString: process.env.DATABASE_URL || localConnectionString,
-  ssl: true,
+  ssl: ssl,
 });
 
 pgClient.on('error', (e) => console.log(`Unable to connect to Postgres server./ See below.\n${e}`));

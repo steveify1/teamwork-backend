@@ -10,7 +10,7 @@ const { completeArticleData } = require('./mockData/articlesMock');
 
 globalSpec('Feeds', () => {
   const headers = { token: '' };
-  const endpoint = '/api/v1/feeds';
+  const endpoint = '/api/v1/feed';
   const method = 'get';
   // const gifData = {
   //   title: 'title',
