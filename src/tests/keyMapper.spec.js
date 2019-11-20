@@ -4,12 +4,12 @@ const data = require('./mockData/keyMapperMock');
 // Testing the key Mapper
 describe('keyMapper', () => {
   it('should reject the promise if the arrayOfObject argument is not an array', (done) => {
-    jasmine.expectAsync(keyMapper(undefined, { name: 'steve' })).toBeRejected();
+    expectAsync(keyMapper(undefined, { name: 'steve' })).toBeRejected();
     done();
   });
 
   it('should resolve the promise if the arrayOfObjects argument is really an array', (done) => {
-    jasmine.expectAsync(keyMapper(data, { author_id: 'authorId' })).toBeResolved();
+    expectAsync(keyMapper(data, { author_id: 'authorId' })).toBeResolved();
     done();
   });
 });
