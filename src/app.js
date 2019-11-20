@@ -5,6 +5,7 @@ const xss = require('xss-clean');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
+const cors = require('./middlewares/cors');
 const routes = require('./routes/routes');
 
 
@@ -25,7 +26,7 @@ const limiter = rateLimit({
   message: 'Too many requests. Please try again in an hour',
 });
 
-app.use('/api', limiter);
+app.use('/api', cors, limiter);
 
 // XSS Clean
 app.use(xss());

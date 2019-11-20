@@ -5,6 +5,7 @@ const Category = require('../database/models/categoryModel');
 const ResponseError = require('../utils/responseError');
 const sendResponse = require('../utils/sendResponse');
 const consoleLogger = require('../utils/consoleLogger');
+const keyMapper = require('../services/keyMapper');
 
 exports.getArticle = async (req, res) => {
   const { articleId } = req.params;
@@ -217,6 +218,7 @@ exports.postComment = async (req, res) => {
   }
 };
 
+// GET ARTICLE BY CATEGORY
 exports.getByCategory = async (req, res) => {
   const { tag } = req.query;
   try {
@@ -233,8 +235,16 @@ exports.getByCategory = async (req, res) => {
         message: 'There is currently no article in selected category',
       });
     }
+
+    // Map result using keyMapper
+    const articles = await keyMapper(result.rows, {
+      author_id: 'authorId',
+      category_id: 'categoryId',
+      timestamp: 'createdOn',
+    });
+
     // send list of articles
-    sendResponse(res, 200, 'success', result.rows);
+    sendResponse(res, 200, 'success', articles);
   } catch (error) {
     consoleLogger.log(error);
     sendResponse(res, error.statusCode, 'error', error.message);

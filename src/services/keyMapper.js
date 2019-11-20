@@ -44,9 +44,11 @@ const keyMapper = (arrayOfObjects, map) => {
       });
 
       // check if the content of the object is a gif or an article, then map accordingly
-      postType = obj.content.startsWith('http') ? 'url' : 'article';
-      obj[postType] = obj.content;
-      // delete obj.content;
+      if (obj.content) { // checking that the 'content' property exists.
+        postType = obj.content.startsWith('http') ? 'url' : 'article';
+        obj[postType] = obj.content;
+        delete obj.content;
+      }
 
       // push the new copy of the object into `arrayOfObjectsWithMappedKeys`
       arrayOfObjectsWithMappedKeys.push(obj);
