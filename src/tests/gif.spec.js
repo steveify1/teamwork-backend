@@ -155,7 +155,7 @@ globalSpec('Gifs', () => {
     let endpoint1;
 
     beforeAll((done) => {
-      // Create an article to be utilized by the rest of the suite.
+      // Create a gif to be utilized by the rest of the suite.
       request.post({
         uri: endpoint,
         headers,

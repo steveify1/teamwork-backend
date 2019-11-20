@@ -19,7 +19,7 @@ router.use('/articles', auth, articleRoute);
 router.use('/gifs', auth, gifRoute);
 
 // Feeds Route
-router.use('/feeds', auth, feedRoute);
+router.use('/feed', auth, feedRoute);
 
 // Exposing API version
 module.exports = router;

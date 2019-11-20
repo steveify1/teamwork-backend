@@ -1,6 +1,11 @@
 # mock json-type data format for unit tests
 src/tests/mockData/
+
+# I had to ignore this file after I refactored the 'model.js' file and had less time to update its spec
 src/tests/model.spec.js
+
+# I ignore the following file here, because somehow eslint says 'expectAsync()` is not a function
+src/tests/keyMapper.spec.js
 
 # node_modules
 node_modules/

@@ -10,11 +10,13 @@ const {
   completeArticleData3,
   completeArticleData4,
   completeArticleData5,
+  completeArticleData6,
   completeArticleUpdate,
   noArticleTitle,
   noArticleBody,
   invalidArticleBody,
   noArticleTags,
+  unavailableTag,
 } = require('./mockData/articlesMock');
 
 globalSpec('Articles', () => {
@@ -99,6 +101,14 @@ globalSpec('Articles', () => {
       request(method, endpoint, headers, noArticleTags, (error, response, body) => {
         expect(response.statusCode).toEqual(201);
         expect(body.data.category).toBeUndefined();
+        done();
+      });
+    });
+
+    it('should return a 400 status code if the category supplied does not exist in the categories table', (done) => {
+      request(method, endpoint, headers, unavailableTag, (error, response, body) => {
+        expect(response.statusCode).toEqual(400);
+        expect(body.status).toBe('error');
         done();
       });
     });
@@ -417,6 +427,49 @@ globalSpec('Articles', () => {
       request(method, endpoint, malformedToken, null, (error, response, body) => {
         expect(response.statusCode).toEqual(401);
         expect(body.error).toBe('jwt malformed');
+        done();
+      });
+    });
+  });
+
+  // GET ARTICLES BY CATEGORY
+  describe('GET /api/v1/articles?tag=<category>', () => {
+    const method = 'get';
+    const endpoint = '/api/v1/articles';
+
+    beforeAll((done) => {
+      // Create an article to be utilized by the rest of the suite.
+      request('post', endpoint, headers, completeArticleData6, (error, response, body) => {
+        // insert the article id into the endpoint
+        expect(response.statusCode).toEqual(201);
+        expect(body.status).toBe('success');
+        done();
+      });
+    });
+
+    it('should return a 200 status code if articles are returned successfully', (done) => {
+      // 'finance' is a default category in the categories table in the database of the application
+      request(method, `${endpoint}?tag=finance`, headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(200);
+        expect(body.status).toBe('success');
+        done();
+      });
+    });
+
+    it('should return a 200 status code if the category exists, but there is currently no article in that category', (done) => {
+      // 'research' is a default category in the categories table in the database of the application
+      request(method, `${endpoint}?tag=research`, headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(200);
+        expect(body.status).toBe('success');
+        done();
+      });
+    });
+
+    it('should return a 400 status code if the selected category does not exist in the category table', (done) => {
+      // 'aaaa' is not a default category in the categories table in the database of the application
+      request(method, `${endpoint}?tag=aaaa`, headers, null, (error, response, body) => {
+        expect(response.statusCode).toEqual(404);
+        expect(body.status).toBe('error');
         done();
       });
     });

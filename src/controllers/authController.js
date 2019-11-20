@@ -29,26 +29,25 @@ exports.signUp = async (req, res) => {
     }
 
     // create the user
-    User.create(clientData)
-      .then((obj) => {
-        const {
-          id,
-          firstname,
-          avatar,
-          _timestamp,
-        } = obj;
+    const obj = await User.create(clientData);
 
-        // gnerate token
-        const token = generateToken({ id, _timestamp });
+    const {
+      id,
+      firstname,
+      avatar,
+      _timestamp,
+    } = obj;
 
-        sendResponse(res, 201, 'success', {
-          message: 'User account successfully created',
-          token,
-          userId: id,
-          firstName: firstname,
-          avatar,
-        });
-      }).catch((error) => sendResponse(res, 400, 'error', 'Email already exists'));
+    // gnerate token
+    const token = generateToken({ id, _timestamp });
+
+    sendResponse(res, 201, 'success', {
+      message: 'User account successfully created',
+      token,
+      userId: id,
+      firstName: firstname,
+      avatar,
+    });
   } catch (error) {
     consoleLogger.log(error);
     sendResponse(res, error.statusCode, 'error', error.message);
