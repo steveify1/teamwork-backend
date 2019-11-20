@@ -214,7 +214,7 @@ class Model extends Mechanics {
   }
 
   // This lets the user make custom queries
-  async custom(customQuery, data) {
+  custom(customQuery, data) {
     // set the operation to custom
     this.setOperation('custom');
 
@@ -224,7 +224,7 @@ class Model extends Mechanics {
     // set the data array to the data array accompanying the custom query
     this.values = data;
 
-    await this.exec();
+    return this;
   }
 }
 
