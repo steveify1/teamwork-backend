@@ -58,8 +58,6 @@ exports.createArticle = async (req, res) => {
     // check if the category exists in request body
     const { category } = clientData;
     if (category) {
-      console.log(category);
-
       // check if category exists in db
       const isCategory = await Category.findByProps({ category });
       if (!isCategory.rowCount) {

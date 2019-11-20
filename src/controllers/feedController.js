@@ -1,29 +1,22 @@
 const sendResponse = require('../utils/sendResponse');
 const feedModel = require('../database/models/feedModel');
-const { sort } = require('../services/feedService');
+const keyMapper = require('../services/keyMapper');
 
 exports.getAll = async (req, res) => {
   // get feeds
-  let feeds = await feedModel.feeds();
+  const { rowCount, rows } = await feedModel.feeds();
 
-  if (feeds.length === 0) {
+  if (!rowCount) {
     return sendResponse(res, 200, 'success', {
       message: 'no post to show',
     });
   }
 
-  // eslint-disable-next-line prefer-arrow-callback
-  feeds = await sort(feeds);
+  // map the keys correctly
+  const feeds = await keyMapper(rows, {
+    author_id: 'authorId',
+    timestamp: 'createdOn',
+  });
 
   sendResponse(res, 200, 'success', feeds);
-
-
-  // sendResponse(res, 200, 'success', {
-  //   id: data.id,
-  //   title: data.title,
-  //   imageUrl: data.image_url,
-  //   authorId: data.author_id,
-  //   createdOn: data.timestamp,
-  //   comments: comments.rows,
-  // });
 };
