@@ -12,4 +12,13 @@ describe('keyMapper', () => {
     expectAsync(keyMapper(data, { author_id: 'authorId' })).toBeResolved();
     done();
   });
+
+  it('should resolve the promise if the arrayOfObjects argument is really an array', (done) => {
+    expectAsync(keyMapper(data, {
+      author_id: 'authorId',
+      timestamp: 'createdOn',
+      name: 'Name',
+    })).toBeResolved();
+    done();
+  });
 });
