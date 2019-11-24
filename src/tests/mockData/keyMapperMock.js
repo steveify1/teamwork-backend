@@ -10,7 +10,7 @@ module.exports = [
     "id": 114,
     "title": "i am a gif title 2",
     "author_id": 1038,
-    "createdOn": "2019-11-20T13:37:55.843+01:00",
+    "timestamp": "2019-11-20T13:37:55.843+01:00",
     "content": "https://res.cloudinary.com/drogjgy99/image/upload/v1574253474/ev0zc07prqfirgz0nidf.gif"
   },
   {
