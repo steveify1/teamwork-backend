@@ -1,16 +1,20 @@
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
-const cors = require('./middlewares/cors');
+// const cors = require('./middlewares/cors');
 const routes = require('./routes/routes');
 
 
 // Application initializing
 const app = express();
+
+// Enable CORS
+app.use(cors());
 
 // Debugging with morgan
 app.use(morgan());
@@ -26,7 +30,7 @@ const limiter = rateLimit({
   message: 'Too many requests. Please try again in an hour',
 });
 
-app.use('/api', cors, limiter);
+app.use('/api', limiter);
 
 // XSS Clean
 app.use(xss());
