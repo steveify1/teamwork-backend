@@ -6,6 +6,7 @@ module.exports = async (req, res, next) => {
     const { token } = req.headers;
 
     console.log(req.headers);
+    console.log(req.headers.token);
 
     // verify that the token header is defined and not empty
     if (!token) { throw new Error('Please, sign up or log in to your account.'); }
