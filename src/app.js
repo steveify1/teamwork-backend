@@ -1,11 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
-const cors = require('./middlewares/cors');
+// const cors = require('./middlewares/cors');
 const routes = require('./routes/routes');
 
 
