@@ -5,6 +5,7 @@ module.exports = async (req, res, next) => {
   try {
     const { token } = req.headers;
 
+    console.log(req.headers);
     console.log(req.headers.token);
 
     // verify that the token header is defined and not empty
