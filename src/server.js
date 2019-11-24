@@ -3,7 +3,7 @@ const app = require('./app');
 const runMigrations = require('./database/migrations');
 
 // Set App Server Port
-app.set('PORT', process.env.PORT || 3000);
+app.set('PORT', process.env.PORT || 8000);
 app.set('HOST', process.env.HOST || '127.0.0.1');
 
 // Exposing the HTTP server object
