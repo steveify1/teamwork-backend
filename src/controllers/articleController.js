@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const Article = require('../database/models/articleModel');
 const Comment = require('../database/models/commentModel');
+const User = require('../database/models/userModel');
 const Category = require('../database/models/categoryModel');
 const ResponseError = require('../utils/responseError');
 const sendResponse = require('../utils/sendResponse');
@@ -19,12 +20,12 @@ exports.getArticle = async (req, res) => {
     if (!rowCount) { throw new ResponseError(404, 'Oops! Article does not exist'); }
 
     // get comments
-    // const comments = await Comment.findByProps({ post_id: rows[0].id });
-    const commentQuery = `SELECT firstname, lastname, avatar, c.comment, c._timestamp FROM comments as c 
+    const commentQuery = `SELECT users.id, firstname, lastname, avatar, c.comment, c._timestamp FROM comments as c 
       INNER JOIN users ON c.author_id=users.id WHERE post_id=$1;`;
     let comments = await Comment.custom(commentQuery, [rows[0].id]).exec();
 
     comments = await keyMapper(comments.rows, {
+      id: 'authorId',
       firstname: 'firstName',
       lastname: 'lastName',
       _timestamp: 'createdOn',
@@ -213,6 +214,15 @@ exports.postComment = async (req, res) => {
       _timestamp,
     } = result[0];
 
+    // Get comment author
+    const authorQuery = 'SELECT id, firstname, lastname, avatar FROM users WHERE id=$1';
+    let author = await User.custom(authorQuery, [clientData.userId]).exec();
+
+    author = await keyMapper(author.rows, {
+      id: 'authorId',
+      firstname: 'firstName',
+      lastname: 'lastName',
+    });
     // send response
     sendResponse(res, 201, 'success', {
       message: 'Comment successfully created',
@@ -220,6 +230,7 @@ exports.postComment = async (req, res) => {
       article,
       comment,
       createdOn: _timestamp,
+      ...author[0],
     });
   } catch (error) {
     consoleLogger.log(error);
