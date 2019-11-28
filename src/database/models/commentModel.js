@@ -10,13 +10,14 @@ class Comment extends Model {
   async create(data) {
     const query = `
       INSERT INTO ${this.relation}
-      (comment, post_id, author_id, _timestamp)
-      values ($1, $2, $3, $4) RETURNING id, comment, post_id, author_id, _timestamp`;
+      (comment, post_id, author_id, post_type_id, _timestamp)
+      values ($1, $2, $3, $4, $5) RETURNING id, comment, post_id, author_id, post_type_id, _timestamp`;
 
     const values = [
       data.comment,
       data.postId,
       data.userId,
+      data.postTypeId, // This is either 1 or 2 where 1 = gif, 2 = article
       new Date(),
     ];
 

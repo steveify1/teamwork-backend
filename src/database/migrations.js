@@ -6,7 +6,7 @@ const gifSchema = require('./schemas/gifSchema');
 const categorySchema = require('./schemas/categorySchema');
 const postTypeSchema = require('./schemas/postTypeSchema');
 const categoryModel = require('./models/categoryModel');
-const postTypeModel = require('./models/categoryModel');
+const postTypeModel = require('./models/postTypeModel');
 
 // This function is going to generate a table for each Schema in our app
 module.exports = async () => {

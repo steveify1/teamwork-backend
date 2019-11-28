@@ -205,6 +205,7 @@ exports.postComment = async (req, res) => {
       postId: articleId,
       comment: clientData.comment,
       userId: clientData.userId,
+      postTypeId: 2, // post_type_id 2 represents 'article' posts
     });
 
     const {
