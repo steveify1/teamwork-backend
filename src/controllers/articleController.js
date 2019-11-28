@@ -201,11 +201,14 @@ exports.postComment = async (req, res) => {
     if (isArticle.rowCount === 0) { throw new ResponseError(404, 'Oops! Article does not exist'); }
 
     // post comment
-    const result = await Comment.create({
+    const commentData = {
       postId: articleId,
       comment: clientData.comment,
       userId: clientData.userId,
-    });
+      postTypeId: 2, // post_type_id 2
+    };
+
+    const result = await Comment.create(commentData);
 
     const {
       article,

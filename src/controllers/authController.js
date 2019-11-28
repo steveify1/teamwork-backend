@@ -73,6 +73,9 @@ exports.login = async (req, res) => {
     const {
       id,
       firstname,
+      lastname,
+      // eslint-disable-next-line camelcase
+      job_role,
       _timestamp,
       password,
     } = rows[0];
@@ -89,6 +92,8 @@ exports.login = async (req, res) => {
       token: token,
       userId: id,
       firstName: firstname,
+      lastName: lastname,
+      jobRole: job_role,
     });
   } catch (error) {
     consoleLogger.log(error);

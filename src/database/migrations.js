@@ -4,8 +4,9 @@ const articleSchema = require('./schemas/articleSchema');
 const commentSchema = require('./schemas/commentSchema');
 const gifSchema = require('./schemas/gifSchema');
 const categorySchema = require('./schemas/categorySchema');
-// const postTypeSchema = require('./schemas/postTypeSchema');
+const postTypeSchema = require('./schemas/postTypeSchema');
 const categoryModel = require('./models/categoryModel');
+const postTypeModel = require('./models/postTypeModel');
 
 // This function is going to generate a table for each Schema in our app
 module.exports = async () => {
@@ -14,7 +15,8 @@ module.exports = async () => {
     await userSchema();
     await categorySchema();
     await categoryModel.populate(); // Populates the 'categories' table
-    // await postTypeSchema();
+    await postTypeSchema();
+    await postTypeModel.populate(); // Populates the 'post_types' table
     await articleSchema();
     await commentSchema();
     await gifSchema();
