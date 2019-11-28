@@ -107,6 +107,9 @@ exports.deleteGif = async (req, res) => {
 
     if (!rowCount) { throw new ResponseError(404, 'Oops! The gif you want to delete seems to missing'); }
 
+    // First attempt to delete gif comments
+    await Comment.delete({ post_id: gifId }).exec();
+
     // delete the post if the above conditions are false and execution reaches here.
     await Gif.deleteById(gifId);
 

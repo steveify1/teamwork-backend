@@ -173,6 +173,9 @@ exports.deleteArticle = async (req, res) => {
     // check that the user id is the same as the article author id before permitting delete
     if (rows[0].author_id !== userId) { throw new ResponseError(401, 'You don\'t have permissions to delete this post'); }
 
+    // First attempt to delete gif comments
+    await Comment.delete({ post_id: articleId }).exec();
+
     // delete the post if the above conditions are false and execution reaches here.
     await Article.deleteById(articleId);
 
