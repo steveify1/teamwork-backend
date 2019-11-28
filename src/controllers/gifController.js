@@ -23,8 +23,8 @@ exports.getGif = async (req, res) => {
     if (!rowCount) { throw new ResponseError(404, 'Oops! gif does not exist'); }
 
     // get comments
-    const commentQuery = `SELECT s.id, s.firstname, s.lastname, s.avatar, c.comment, c._timestamp FROM comments as c 
-      INNER JOIN users as s ON c.author_id=users.id WHERE post_id=$1;`;
+    const commentQuery = `SELECT users.id, users.firstname, users.lastname, users.avatar, c.comment, c._timestamp FROM comments as c 
+      INNER JOIN users ON c.author_id=users.id WHERE post_id=$1;`;
     let comments = await Comment.custom(commentQuery, [rows[0].id]).exec();
 
     comments = await keyMapper(comments.rows, {

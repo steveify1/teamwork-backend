@@ -217,12 +217,12 @@ exports.postComment = async (req, res) => {
     // Get comment author
     const authorQuery = 'SELECT id, firstname, lastname, avatar FROM users WHERE id=$1';
     let author = await User.custom(authorQuery, [clientData.userId]).exec();
-
     author = await keyMapper(author.rows, {
       id: 'authorId',
       firstname: 'firstName',
       lastname: 'lastName',
     });
+
     // send response
     sendResponse(res, 201, 'success', {
       message: 'Comment successfully created',
