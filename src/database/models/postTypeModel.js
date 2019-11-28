@@ -23,8 +23,8 @@ class PostType extends Model {
 
       // execute the query
       try {
-        await this.DB.query(query, values);
-        console.log(`'${this.relation}' table successfully populated`);
+        await this.custom(query, values).exec();
+        // console.log(`'${this.relation}' table successfully populated`);
       } catch (error) {
         consoleLogger.log(error);
         return `Unable to populate ${this.relation}::: ${error}`;
