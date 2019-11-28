@@ -16,6 +16,8 @@ exports.getAll = async (req, res) => {
   const feeds = await keyMapper(rows, {
     author_id: 'authorId',
     timestamp: 'createdOn',
+    firstname: 'firstName',
+    lastname: 'lastName',
   });
 
   sendResponse(res, 200, 'success', feeds);
