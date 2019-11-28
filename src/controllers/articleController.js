@@ -19,7 +19,16 @@ exports.getArticle = async (req, res) => {
     if (!rowCount) { throw new ResponseError(404, 'Oops! Article does not exist'); }
 
     // get comments
-    const comments = await Comment.findByProps({ post_id: rows[0].id });
+    // const comments = await Comment.findByProps({ post_id: rows[0].id });
+    const commentQuery = `SELECT firstname, lastname, avatar, c.comment, c._timestamp FROM comments as c 
+      INNER JOIN users ON c.author_id=users.id WHERE post_id=$1;`;
+    let comments = await Comment.custom(commentQuery, [rows[0].id]).exec();
+
+    comments = await keyMapper(comments.rows, {
+      firstname: 'firstName',
+      lastname: 'lastName',
+      _timestamp: 'createdOn',
+    });
 
     // if there is no error and execution reaches this point..
     const data = rows[0];
@@ -28,7 +37,7 @@ exports.getArticle = async (req, res) => {
       title: data.title,
       article: data.article,
       createdOn: data.timestamp,
-      comments: comments.rows,
+      comments: comments,
     }, null);
   } catch (error) {
     consoleLogger.log(error);
