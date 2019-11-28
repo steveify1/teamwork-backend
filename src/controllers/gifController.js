@@ -140,6 +140,7 @@ exports.postComment = async (req, res) => {
       postId: gifId,
       comment: clientData.comment,
       userId: clientData.userId,
+      postTypeId: 1, // post_type_id 1 represents 'gif' posts
     });
 
     // extract comment data
@@ -148,6 +149,8 @@ exports.postComment = async (req, res) => {
       comment,
       _timestamp,
     } = result[0];
+
+    console.log(result[0]);
 
     // Get comment author
     const authorQuery = 'SELECT id, firstname, lastname, avatar FROM users WHERE id=$1';

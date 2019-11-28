@@ -7,5 +7,6 @@ module.exports = Schema('comments', () => `
     comment TEXT NOT NULL,
     author_id INTEGER NOT NULL,
     post_id INTEGER NOT NULL,
+    post_type_id INTEGER NOT NULL,
     _timestamp VARCHAR NOT NULL);
 `);
