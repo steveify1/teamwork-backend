@@ -2,11 +2,13 @@
 require('../middlewares/cloudinary');
 const cloudinary = require('cloudinary');
 const Comment = require('../database/models/commentModel');
+const User = require('../database/models/userModel');
 const Gif = require('../database/models/gifModel');
 // const Category = require('../database/models/categoryModel');
 const ResponseError = require('../utils/responseError');
 const sendResponse = require('../utils/sendResponse');
 const consoleLogger = require('../utils/consoleLogger');
+const keyMapper = require('../services/keyMapper');
 
 // Get GIF
 exports.getGif = async (req, res) => {
@@ -21,7 +23,16 @@ exports.getGif = async (req, res) => {
     if (!rowCount) { throw new ResponseError(404, 'Oops! gif does not exist'); }
 
     // get comments
-    const comments = await Comment.findByProps({ post_id: rows[0].id });
+    const commentQuery = `SELECT users.id, users.firstname, users.lastname, users.avatar, c.comment, c._timestamp FROM comments as c 
+      INNER JOIN users ON c.author_id=users.id WHERE post_id=$1;`;
+    let comments = await Comment.custom(commentQuery, [rows[0].id]).exec();
+
+    comments = await keyMapper(comments.rows, {
+      id: 'authorId',
+      firstname: 'firstName',
+      lastname: 'lastName',
+      _timestamp: 'createdOn',
+    });
 
     // if there is no error and execution reaches this point..
     const data = rows[0];
@@ -31,7 +42,7 @@ exports.getGif = async (req, res) => {
       imageUrl: data.image_url,
       authorId: data.author_id,
       createdOn: data.timestamp,
-      comments: comments.rows,
+      comments: comments,
     }, null);
   } catch (error) {
     consoleLogger.log(error);
@@ -130,20 +141,32 @@ exports.postComment = async (req, res) => {
 
     // extract comment data
     const {
+      id,
       comment,
       _timestamp,
     } = result[0];
 
+    // Get comment author
+    const authorQuery = 'SELECT id, firstname, lastname, avatar FROM users WHERE id=$1';
+    let author = await User.custom(authorQuery, [clientData.userId]).exec();
+
+    author = await keyMapper(author.rows, {
+      id: 'authorId',
+      firstname: 'firstName',
+      lastname: 'lastName',
+    });
+
     // extract gif data
     const gif = isGif.rows[0];
 
-
     // send response
     sendResponse(res, 201, 'success', {
+      id,
       message: 'comment successfully created',
       title: gif.title,
       comment,
       createdOn: _timestamp,
+      ...author[0],
     });
   } catch (error) {
     consoleLogger.log(error);
