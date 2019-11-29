@@ -87,7 +87,7 @@ exports.login = async (req, res) => {
     // generate user token
     const token = generateToken({ id, _timestamp });
 
-    // send token and success status to log the user into app
+    // send token and success status to log the user into app...
     sendResponse(res, 202, 'success', {
       token: token,
       userId: id,
